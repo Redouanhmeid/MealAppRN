@@ -1,0 +1,28 @@
+{
+    "components": {
+        "Button": {
+            "meta": {},
+            "appearances": {}
+        },
+        "CircleButton": {
+            "meta": {
+                "parameters": {},
+                "variantGroups": {},
+                "states": {},
+                "appearances": {
+                    "filled": {
+                        "default": true
+                    }
+                }
+            }
+        },
+        "appearence": {
+            "filled": {
+                "mapping": {}
+            }
+        },
+        "strict": {
+            "border-radius": 8
+        }
+    }
+}

@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, Image } from 'react-native';
 import { useLinkTo } from '@react-navigation/native';
 import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { AuthContext } from '../context/AuthContext';
 
 const LoginScreen = () => {
+    const {login} = useContext(AuthContext);
     const [value, setValue] = useState('');
     const linkTo = useLinkTo();
     return(
       <Layout style={styles.container}>
         <Layout style={styles.layout} level='1'>
-          <Avatar source={require('../assets/logo.svg')}/>
+        <Image
+        style={styles.logo}
+        source={require('../assets/logo.png')}
+      />
           <Text style={styles.text} category='h3'>Connectez-vous</Text>
           <Input
             style={styles.input}
@@ -26,20 +31,22 @@ const LoginScreen = () => {
             onChangeText={nextValue => setValue(nextValue)}
             secureTextEntry
           />
-          <Button style={styles.button}>S'IDENTIFIER</Button>
+          <Button style={styles.button} onPress={() => {login()}} size='giant'>S'IDENTIFIER</Button>
           <Text style={styles.text}>ou, connectez-vous avec</Text>
           <Layout style={styles.socialmedia}>
+            <Layout style={styles.layout} level='1'></Layout>
             <Layout style={styles.layout} level='1'>
-              <Button style={styles.fb}><Icon name='facebook' /></Button>
+              <Button style={styles.fb} size='large'><Icon name='facebook' /></Button>
             </Layout>
             <Layout style={styles.layout} level='1'>
-              <Button style={styles.google}><Icon name='google' /></Button>
+              <Button style={styles.google} size='large'><Icon name='google' /></Button>
             </Layout>
             <Layout style={styles.layout} level='1'>
-              <Button style={styles.twitter}><Icon name='twitter' /></Button>
+              <Button style={styles.twitter} size='large'><Icon name='twitter' /></Button>
             </Layout>
+            <Layout style={styles.layout} level='1'></Layout>
           </Layout>
-          <Text style={styles.text}> nouveau sur l'application ? <Text style={styles.link} onPress={() => linkTo()}>S'inscrire</Text> </Text>
+          <Text style={styles.text} category='s1'> Nouveau sur l'application? <Text style={styles.link} onPress={() => linkTo()}>S'inscrire</Text> </Text>
         </Layout>
     </Layout>
     )
@@ -90,5 +97,8 @@ const styles = StyleSheet.create({
   },
   link: {
     color: '#4267B2',
+  },
+  logo: {
+    marginVertical: 50,
   },
 });
