@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Image } from 'react-native';
-import { useLinkTo } from '@react-navigation/native';
 import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { AuthContext } from '../context/AuthContext';
@@ -8,7 +7,6 @@ import { AuthContext } from '../context/AuthContext';
 const LoginScreen = () => {
     const {login} = useContext(AuthContext);
     const [value, setValue] = useState('');
-    const linkTo = useLinkTo();
     return(
       <Layout style={styles.container}>
         <Layout style={styles.layout} level='1'>
@@ -46,7 +44,7 @@ const LoginScreen = () => {
             </Layout>
             <Layout style={styles.layout} level='1'></Layout>
           </Layout>
-          <Text style={styles.text} category='s1'> Nouveau sur l'application? <Text style={styles.link} onPress={() => linkTo()}>S'inscrire</Text> </Text>
+          <Text style={styles.text} category='s1'> Nouveau sur l'application? <Text style={styles.link}>S'inscrire</Text> </Text>
         </Layout>
     </Layout>
     )

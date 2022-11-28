@@ -20,9 +20,6 @@
             "filled": {
                 "mapping": {}
             }
-        },
-        "strict": {
-            "border-radius": 8
         }
     }
 }

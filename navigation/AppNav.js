@@ -7,6 +7,7 @@ import LoginScreen from '../screens/login'
 import AppStack from '../screens/AppStack'
 import { AuthProvider, AuthContext } from '../context/AuthContext'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const AppNav = () => {
     const {isLoading, userToken} = useContext(AuthContext);
@@ -23,7 +24,9 @@ const AppNav = () => {
         <AuthProvider>
             <IconRegistry icons={EvaIconsPack} />
             <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
-                {userToken !== null ? <AppStack /> : <LoginScreen />}
+                <SafeAreaProvider>
+                    {userToken !== null ? <AppStack /> : <LoginScreen />}
+                </SafeAreaProvider>
             </ApplicationProvider>
         </AuthProvider>
     )

@@ -8,7 +8,7 @@ import TopNav from '../navigation/TopNav'
 const AppStack = () => {
   return (
       <Layout style={styles.container} level='1'>
-        <Layout style={styles.topnav} level='1'>
+        <Layout /* style={styles.topnav} */ level='1'>
           <TopNav />
         </Layout>
         <Layout style={styles.layout} level='1'>
