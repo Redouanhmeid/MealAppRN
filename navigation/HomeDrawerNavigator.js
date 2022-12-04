@@ -1,44 +1,60 @@
-import { View } from 'react-native'
-import React from 'react'
+import { ImageBackground, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Avatar, Drawer, DrawerItem, Layout, StyleService, Text } from '@ui-kitten/components'
+import { Avatar, Divider, Drawer, DrawerItem, IndexPath, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import AboutScreen from '../screens/AboutScreen';
+import TopNav from './TopNav';
+import Home from '../screens/Home';
+import { BottomTabs } from './BottomTabs';
 
-const HomeDrawerNavigator = ({ navigation, state }) => {
-  const Header = () => (
-    <Layout style={styles.header}>
-      <View style={styles.profileContainer}>
-      <Avatar
-        size="giant"
-        source={require("../assets/logo.png")}
+const { Navigator, Screen } = createDrawerNavigator();
+
+const DrawerContent = ({ navigation, state }) => {
+  const styles = useStyleSheet(themedStyles);
+
+  const Header = (props) => (
+    <React.Fragment>
+      <ImageBackground
+      style={[props.style, styles.header]}
+      sourc={require('../assets/bgheader.jpg')}
       />
-        <Text style={styles.profileName} category="h6">
-          Rocktech
-        </Text>
-      </View>
-    </Layout>
+      <Divider/>
+    </React.Fragment>
   )
+  
   return (
     <SafeAreaView>
       <Drawer
-      header={Header}
-      >
-        <DrawerItem title='Home' /* accessoryLeft={HomeIcon} *//>
-        <DrawerItem title='About' /* accessoryLeft={InfoIcon} *//>
-        <DrawerItem title='Login' /* accessoryLeft={LoginIcon} *//>
+        header={Header}
+        selectedIndex={new IndexPath(state.index)}
+        onSelect={index => navigation.navigate(state.routeNames[index.row])}>
+          <DrawerItem title='Accueil'/*  accessoryLeft={HomeIcon} *//>
+          <DrawerItem title='About' /* accessoryLeft={InfoIcon} *//>
       </Drawer>
-      <Text>hhh</Text>
     </SafeAreaView>
+  )
+}
+
+const HomeDrawerNavigator = ({ }) => {
+  const [selectedIndex, setSelectedIndex] = useState(null)
+
+  return (
+    <Navigator drawerContent={props => <DrawerContent {...props}/>}>
+      <Screen name='Accueil' component={BottomTabs} />
+      <Screen name='About' component={AboutScreen} />
+    </Navigator>
   )
 }
 
 export default HomeDrawerNavigator
 
-const styles = StyleService.create({  
+const themedStyles = StyleService.create({  
   header: {
     height: 128,
-    paddingHorizontal: 16,
-    justifyContent: "center",
-  },
+    flexDirection: 'row',
+    alignItems: 'center',
+  },/* 
   profileContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -51,5 +67,5 @@ const styles = StyleService.create({
     width: 22,
     height: 22,
     marginRight: 8,
-  },
+  }, */
 }); 

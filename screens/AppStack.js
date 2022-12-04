@@ -1,27 +1,21 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import TopNav from '../navigation/TopNav'
 import BottomTabs from '../navigation/BottomTabs'
 import { BottomNavigation, BottomNavigationTab, Layout } from '@ui-kitten/components'
-import TopNav from '../navigation/TopNav'
+import AppNavigator from '../navigation/AppNavigator'
 
 const AppStack = () => {
   return (
-      <Layout style={styles.container} level='1'>
-        <Layout /* style={styles.topnav} */ level='1'>
-          <TopNav />
-        </Layout>
-        <Layout style={styles.layout} level='1'>
-          <Text>AppStack</Text>
-        </Layout>
-        <Layout style={styles.bottom} level='1'>
-          <BottomTabs />
-        </Layout>
-      </Layout>
+    <Layout style={styles.container} level='1'>
+      <AppNavigator />
+    </Layout>
+    
   )
 }
 
 export default AppStack
+
 
 const styles = StyleSheet.create({
   container: {
