@@ -2,15 +2,22 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import TopNav from '../navigation/TopNav'
 import BottomTabs from '../navigation/BottomTabs'
-import { BottomNavigation, BottomNavigationTab, Layout } from '@ui-kitten/components'
+import { ApplicationProvider, BottomNavigation, BottomNavigationTab, IconRegistry, Layout } from '@ui-kitten/components'
 import AppNavigator from '../navigation/AppNavigator'
+import { EvaIconsPack } from '@ui-kitten/eva-icons'
+import { default as theme } from '../theme.json'
+import * as eva from '@eva-design/eva'
 
 const AppStack = () => {
   return (
-    <Layout style={styles.container} level='1'>
-      <AppNavigator />
-    </Layout>
-    
+    <>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
+        <Layout style={styles.container} level='1'>
+          <AppNavigator />
+        </Layout>
+      </ApplicationProvider>
+    </>
   )
 }
 

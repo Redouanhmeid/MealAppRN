@@ -4,8 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Avatar, Divider, Drawer, DrawerItem, IndexPath, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AboutScreen from '../screens/AboutScreen';
-import TopNav from './TopNav';
-import Home from '../screens/Home';
 import { BottomTabs } from './BottomTabs';
 
 const { Navigator, Screen } = createDrawerNavigator();
@@ -17,7 +15,7 @@ const DrawerContent = ({ navigation, state }) => {
     <React.Fragment>
       <ImageBackground
       style={[props.style, styles.header]}
-      sourc={require('../assets/bgheader.jpg')}
+      source={require('../assets/bgheader.jpg')}
       />
       <Divider/>
     </React.Fragment>
@@ -51,7 +49,7 @@ export default HomeDrawerNavigator
 
 const themedStyles = StyleService.create({  
   header: {
-    height: 128,
+    height: 160,
     flexDirection: 'row',
     alignItems: 'center',
   },/* 

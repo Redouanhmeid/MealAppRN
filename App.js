@@ -3,7 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 import AppNav from './navigation/AppNav'
 import 'react-native-gesture-handler'
 
-function App() {
+function App({children}) {
   return (
     <AuthProvider>
       <AppNav />

@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AuthContext } from '../context/AuthContext';
+import { AuthProvider, AuthContext } from '../context/AuthContext';
 
 const LoginScreen = () => {
-    const {login} = useContext(AuthContext);
+    const {login, userToken} = useContext(AuthContext);
     const [value, setValue] = useState('');
     return(
+      <AuthProvider>
       <Layout style={styles.container}>
         <Layout style={styles.layout} level='1'>
         <Image
@@ -30,6 +31,7 @@ const LoginScreen = () => {
             secureTextEntry
           />
           <Button style={styles.button} onPress={() => {login()}} size='giant'>S'IDENTIFIER</Button>
+          <Text>iii : {userToken}</Text>
           <Text style={styles.text}>ou, connectez-vous avec</Text>
           <Layout style={styles.socialmedia}>
             <Layout style={styles.layout} level='1'></Layout>
@@ -47,6 +49,7 @@ const LoginScreen = () => {
           <Text style={styles.text} category='s1'> Nouveau sur l'application? <Text style={styles.link}>S'inscrire</Text> </Text>
         </Layout>
     </Layout>
+    </AuthProvider>
     )
 }
 
