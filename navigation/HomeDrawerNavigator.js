@@ -1,15 +1,18 @@
 import { ImageBackground, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Avatar, Divider, Drawer, DrawerItem, IndexPath, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AboutScreen from '../screens/AboutScreen';
 import { BottomTabs } from './BottomTabs';
+import { AuthContext } from '../context/AuthContext';
+import LoginScreen from '../screens/login';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
 const DrawerContent = ({ navigation, state }) => {
   const styles = useStyleSheet(themedStyles);
+  const {logout} = useContext(AuthContext);
 
   const Header = (props) => (
     <React.Fragment>
@@ -29,6 +32,7 @@ const DrawerContent = ({ navigation, state }) => {
         onSelect={index => navigation.navigate(state.routeNames[index.row])}>
           <DrawerItem title='Accueil'/*  accessoryLeft={HomeIcon} *//>
           <DrawerItem title='About' /* accessoryLeft={InfoIcon} *//>
+          <DrawerItem title='Déconnexion' onPress={() => {logout()}} /* accessoryLeft={InfoIcon} *//>
       </Drawer>
     </SafeAreaView>
   )
@@ -41,6 +45,7 @@ const HomeDrawerNavigator = ({ }) => {
     <Navigator drawerContent={props => <DrawerContent {...props}/>}>
       <Screen name='Accueil' component={BottomTabs} />
       <Screen name='About' component={AboutScreen} />
+      <Screen name='Déconnexion' options={{headerShown: false}} component={LoginScreen} />
     </Navigator>
   )
 }
