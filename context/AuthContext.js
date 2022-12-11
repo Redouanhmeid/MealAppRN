@@ -6,31 +6,30 @@ import { BASE_URL } from '../client-config'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({children}) => {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const [userToken, setUserToken] = useState(null)
     const [userInfo, setUserInfo] =useState(null)
 
     const login = (username, password) => {
         setIsLoading(true);
         console.log(username, password)
-        axios.post(`${BASE_URL}/wp-json/jwt-auth/v1/token`, {
-            username,
-            password
-        })
-        .then(res => {
-            let userInfo = res.data;
-            setUserInfo(userInfo);
-            setUserToken(userInfo.data.token);
-            AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-            AsyncStorage.setItem('userToken', userInfo.data.token);
-        
-            console.log(userInfo);
-            console.log('User Token: ' + userInfo.data.token);
-        })
-        .catch(e => {
-            console.log(`Login Error : ${e}`)
-        })
-        
+        const requestInfo = async () => {
+            try {
+                const res = await axios.post(`${BASE_URL}/wp-json/jwt-auth/v1/token`, {username, password});
+                console.log(res.data);
+                let userInfo = res.data;
+                setUserInfo(userInfo);
+                setUserToken(userInfo.token);
+                AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+                AsyncStorage.setItem('userToken', userInfo.token);
+                console.log(userInfo);
+                console.log('User Token: ' + userInfo.token);
+            }
+            catch(err) {
+                console.error(err);
+            }
+        }
+        requestInfo();
         setIsLoading(false);
     }
     const logout = () => {
@@ -60,7 +59,7 @@ export const AuthProvider = ({children}) => {
     }, [])
 
     return (
-        <AuthContext.Provider value={{login, logout, isLoading, userToken}}>
+        <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo}}>
             {children}
         </AuthContext.Provider>
     )

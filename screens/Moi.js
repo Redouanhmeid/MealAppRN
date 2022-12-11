@@ -1,10 +1,12 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
+import { AuthContext } from '../context/AuthContext'
 
 const Moi = () => {
+  const {userInfo} = useContext(AuthContext)
   return (
     <View>
-      <Text>Moi</Text>
+      <Text>Bonjour {userInfo.user_display_name}</Text>
     </View>
   )
 }

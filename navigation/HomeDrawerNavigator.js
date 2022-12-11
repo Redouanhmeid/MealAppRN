@@ -3,12 +3,23 @@ import React, { useContext, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Avatar, Divider, Drawer, DrawerItem, IndexPath, Layout, StyleService, Text, useStyleSheet } from '@ui-kitten/components'
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faHouse, faInfoCircle ,faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import AboutScreen from '../screens/AboutScreen';
 import { BottomTabs } from './BottomTabs';
 import { AuthContext } from '../context/AuthContext';
 import LoginScreen from '../screens/login';
 
 const { Navigator, Screen } = createDrawerNavigator();
+const HouseIcon = () => (
+  <FontAwesomeIcon icon={ faHouse } />
+);
+const InfoIcon = () => (
+  <FontAwesomeIcon icon={ faInfoCircle } />
+);
+const LeftIcon = () => (
+  <FontAwesomeIcon icon={ faArrowRightFromBracket } />
+);
 
 const DrawerContent = ({ navigation, state }) => {
   const styles = useStyleSheet(themedStyles);
@@ -30,9 +41,9 @@ const DrawerContent = ({ navigation, state }) => {
         header={Header}
         selectedIndex={new IndexPath(state.index)}
         onSelect={index => navigation.navigate(state.routeNames[index.row])}>
-          <DrawerItem title='Accueil'/*  accessoryLeft={HomeIcon} *//>
-          <DrawerItem title='About' /* accessoryLeft={InfoIcon} *//>
-          <DrawerItem title='Déconnexion' onPress={() => {logout()}} /* accessoryLeft={InfoIcon} *//>
+          <DrawerItem title='Accueil' accessoryLeft={HouseIcon}/>
+          <DrawerItem title='About' accessoryLeft={InfoIcon}/>
+          <DrawerItem title='Déconnexion' onPress={() => {logout()}} accessoryLeft={LeftIcon}/>
       </Drawer>
     </SafeAreaView>
   )

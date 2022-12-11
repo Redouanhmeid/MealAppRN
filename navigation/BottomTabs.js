@@ -33,6 +33,7 @@ const BottomTabsBar = ({ navigation, state }) => (
     <Divider />
     <BottomNavigation
       selectedIndex={state.index}
+      appearance='noIndicator'
       onSelect={index => navigation.navigate(state.routeNames[index])} >
       <BottomNavigationTab title='Agenda' icon={CalendarIcon} />
       <BottomNavigationTab title='Apprendre' icon={KanbanIcon} />
@@ -45,11 +46,11 @@ const BottomTabsBar = ({ navigation, state }) => (
 
 export const BottomTabs = () => (
   <Navigator tabBar={props => <BottomTabsBar {...props} />}>
-    <Screen name='Agenda' component={Agenda} />
-    <Screen name='Apprendre' component={Apprendre} />
-    <Screen name='Plus' component={Plus} />
-    <Screen name='Plan Meal' component={PlanMeal} />
-    <Screen name='Moi' component={Moi} />
+    <Screen name='Agenda' options={{headerShown: false}} component={Agenda} />
+    <Screen name='Apprendre' options={{headerShown: false}} component={Apprendre} />
+    <Screen name='Plus' options={{headerShown: false}} component={Plus} />
+    <Screen name='Plan Meal' options={{headerShown: false}} component={PlanMeal} />
+    <Screen name='Moi' options={{headerShown: false}} component={Moi} />
   </Navigator>
 )
 

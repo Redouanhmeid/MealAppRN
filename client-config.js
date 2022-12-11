@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://localhost/meal';
+export const BASE_URL = 'https://www.nextbedesign.com/mealwp';
