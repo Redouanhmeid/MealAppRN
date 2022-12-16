@@ -1,39 +1,26 @@
-import { View, StyleSheet, ScrollView } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import React, { useContext } from 'react'
 import { AuthContext } from '../context/AuthContext'
-import { Card, Text, Layout } from '@ui-kitten/components';
-
-const Header = (props) => (
-  <View {...props}>
-    <Text category='h6'>Maldives</Text>
-    <Text category='s1'>By Wikipedia</Text>
-  </View>
-);
+import { Text, Layout } from '@ui-kitten/components';
+import Defis from './defis'
+import Objectifs from './objectifs';
+import IMC from './imc';
 
 const Moi = () => {
   const {userInfo} = useContext(AuthContext)
   return (
-    <View>
-      <ScrollView>
-        <Text>Bonjour {userInfo.user_display_name}</Text>
-        <Layout style={styles.topContainer} level='1'>
-          <Card style={styles.card} header={Header}>
-            <Text>
-              The Maldives, officially the Republic of Maldives, is a small country in South Asia,
-              located in the Arabian Sea of the Indian Ocean.
-              It lies southwest of Sri Lanka and India, about 1,000 kilometres (620 mi) from the Asian continent
-            </Text>
-          </Card>
-          <Card style={styles.card} header={Header}>
-            <Text>
-              The Maldives, officially the Republic of Maldives, is a small country in South Asia,
-              located in the Arabian Sea of the Indian Ocean.
-              It lies southwest of Sri Lanka and India, about 1,000 kilometres (620 mi) from the Asian continent
-            </Text>
-          </Card>
-        </Layout>
-      </ScrollView>
-    </View>
+    <ScrollView>
+      {/* <Text>Bonjour {userInfo.user_display_name}</Text> */}
+      <Layout style={styles.topContainer} level='1'>
+        <Defis />
+      </Layout>
+      <Layout style={styles.topContainer} level='1'>
+        <Objectifs />
+      </Layout>
+      <Layout style={styles.topContainer} level='1'>
+        <IMC />
+      </Layout>
+    </ScrollView>
   )
 }
 
@@ -43,12 +30,6 @@ const styles = StyleSheet.create({
   topContainer: {
     flexDirection: 'column',
     margin: 16,
-    borderRadius: 12,
-  },
-  card: {
-    flex: 1,
-    padding: 2,
-    backgroundColor: "#fff",
     borderRadius: 12,
   },
 });

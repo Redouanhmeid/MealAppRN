@@ -80,7 +80,7 @@ const Article = ({navigation, route}) => {
         </ScrollView>
         <Divider/>
         <Layout style={styles.activityContainer} level='1'>
-            <ClockIcon/>
+            <ClockIcon />
             <Text
               style={styles.dateLabel}
               appearance='hint'
