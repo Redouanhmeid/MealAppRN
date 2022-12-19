@@ -1,28 +1,38 @@
 import React, { useState, createRef } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Calendar, Layout, Text } from '@ui-kitten/components';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleLeft, faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 
 const LeftIcon = () => (
-  <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 16 }/>
+  <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>
 );
 const RightIcon = (props) => (
-  <FontAwesomeIcon icon={ faAngleRight } style={styles.icon} size={ 16 }/>
+  <FontAwesomeIcon icon={ faAngleRight } style={styles.icon} size={ 24 }/>
 );
+const CalendarIcon = (props) => (
+  <FontAwesomeIcon icon={ faCalendarAlt } style={styles.icon} />
+);
+
+const windowWidth = Dimensions.get('window').width;
 
 const now = new Date();
 const date = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-const initialVisibleDate = new Date(now.getFullYear(), now.getMonth() + 3, now.getDate() + 1);
+const initialVisibleDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+const today = new Date()
+let tomorrow =  new Date(now.getFullYear(), now.getMonth(), now.getDate())
+
 
 const PlanMeal = () => {
+  
   const [ selectedDate, setSelectedDate ] = useState(date);
 
   const componentRef = createRef(<Calendar />);
 
   const scrollToSelected = () => {
     if (componentRef.current) {
-        componentRef.current.scrollToDate(selectedDate);
+      componentRef.current.scrollToDate(selectedDate);
     }
   };
 
@@ -32,20 +42,18 @@ const PlanMeal = () => {
     }
   };
 
+  const scrollToTomorrow = () => {
+    tomorrow.setDate(today.getDate() + 1)
+  }
+
   return (
-    <Layout style={styles.container} level='1'>
+    <Layout style={styles.container} level='2'>
       <View style={styles.viewclass}>
-        <Button onPress={scrollToToday} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' />
-        <Button appearance='ghost' >Aujourd'hui</Button>
-        <Button onPress={scrollToSelected} style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' />
+        <Button onPress={scrollToToday} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
+        <Button appearance='ghost' style={styles.today} size='large'><CalendarIcon /> {selectedDate.toLocaleDateString('en-GB')} {tomorrow.toLocaleDateString('en-GB')}</Button>
+        <Button onPress={scrollToTomorrow} style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
       </View>
       <View style={styles.calendarContainer}>
-        <Text
-          category='h6'
-          style={styles.text}>
-          Selected date: {selectedDate.toLocaleDateString()}
-        </Text>
-
         <Calendar
           ref={componentRef}
           date={selectedDate}
@@ -67,21 +75,38 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   calendarContainer: {
-    margin: 2,
+    width: windowWidth,
+    margin: 30,
   },
   text: {
     marginVertical: 8,
   },
   viewclass: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: windowWidth,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    alignItems: 'center'
+  },
+  today: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   pullleft: {
-    width: 50,
     borderRadius: 30,
+    width: 53,
+    height: 53,
+    borderColor: "#fff",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   pullright: {
-    width: 50,
     borderRadius: 30,
+    width: 53,
+    height: 53,
+    borderColor: "#fff",
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
 });
