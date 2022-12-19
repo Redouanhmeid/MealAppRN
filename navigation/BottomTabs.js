@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React, { useState } from 'react'
 import { BottomNavigation, BottomNavigationTab, Divider } from '@ui-kitten/components'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -32,8 +32,9 @@ const BottomTabsBar = ({ navigation, state }) => (
   <View>
     <Divider />
     <BottomNavigation
+      style={styles.tabBar}
       selectedIndex={state.index}
-      appearance='noIndicator'
+      indicatorStyle={{backgroundColor: '#000', height: 4}}
       onSelect={index => navigation.navigate(state.routeNames[index])} >
       <BottomNavigationTab title='Agenda' icon={CalendarIcon} />
       <BottomNavigationTab title='Apprendre' icon={KanbanIcon} />
@@ -54,3 +55,8 @@ export const BottomTabs = () => (
   </Navigator>
 )
 
+const styles = StyleSheet.create({
+  tabBar: {
+      borderTopColor: '#ddd',
+  },
+})

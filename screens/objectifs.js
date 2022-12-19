@@ -1,5 +1,5 @@
 import { StyleSheet, View, Image } from 'react-native'
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { Card, Text, Layout, Button, ListItem } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -23,7 +23,13 @@ const Header = (props) => (
 );
 
 const Objectifs = () => {
-    const {userInfo} = useContext(AuthContext)
+  const {userInfo, leadInfo} = useContext(AuthContext)
+  const [objectif, setObjectif] = useState(null)
+  useEffect(() => {
+    setObjectif(leadInfo.poidssouhaite - leadInfo.poidsactuel)
+    console.log(objectif)
+  }, [objectif])
+  
   return (
     <Card style={styles.card} header={Header}>
       <View style={styles.viewclass}>
@@ -32,9 +38,7 @@ const Objectifs = () => {
             source={require('../assets/fire.png')}
         />
         <Text category='h5'>Objectif actuel :</Text>
-        <Text category='h2'>
-            - 1 Kg
-        </Text>
+        {objectif >= 0 ? <Text category='h2'>+ {objectif} Kg</Text> : <Text category='h2'>- {objectif} Kg</Text>}
       </View>
     </Card>
   )

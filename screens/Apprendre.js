@@ -1,6 +1,6 @@
 import { View, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Divider, Layout, Spinner, Text } from '@ui-kitten/components'
+import { Card, Divider, Layout, Spinner, Text } from '@ui-kitten/components'
 import { BASE_URL } from '../client-config'
 import axios from 'axios'
 import Article from './Article'
@@ -77,7 +77,7 @@ const Apprendre = ({navigation }) => {
     <Layout style={styles.container} level='1'>
       <ScrollView>
        {posts.map((post, index) => (
-        <Card key={index} style={styles.details}>
+        <Card key={index} appearance="outline" style={styles.details} onPress={() => navigation.navigate('Article', {post: post.id, fm: requestFM(post.featured_media)})}>
           <Image
             style={styles.header}
             source={{
@@ -85,7 +85,6 @@ const Apprendre = ({navigation }) => {
             }}
           />
           <Text category='s1'>{post.title.rendered}</Text>
-          <Button size='small' style={styles.readmorebtn} onPress={() => navigation.navigate('Article', {post: post.id, fm: requestFM(post.featured_media)})}>Lire plus</Button>
         </Card>
        ))}
       </ScrollView>
@@ -105,18 +104,19 @@ const styles = StyleSheet.create({
   details: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 8,
+    justifyContent:'center',
+    borderColor:0,
+    marginTop: 8,
   },
   title: {
     marginHorizontal: 4,
-  },
-  readmorebtn: {
-    marginVertical: 4,
+    alignItems: 'center',
   },
   header: {
     height: 226,
     width: 339,
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 16,
   },
 });

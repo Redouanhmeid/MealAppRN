@@ -5,9 +5,10 @@ import { Text, Layout } from '@ui-kitten/components';
 import Defis from './defis'
 import Objectifs from './objectifs';
 import IMC from './imc';
+import Progres from './progres';
 
 const Moi = () => {
-  const {userInfo} = useContext(AuthContext)
+  const {userInfo, leadInfo} = useContext(AuthContext)
   return (
     <ScrollView>
       {/* <Text>Bonjour {userInfo.user_display_name}</Text> */}
@@ -16,6 +17,9 @@ const Moi = () => {
       </Layout>
       <Layout style={styles.topContainer} level='1'>
         <Objectifs />
+      </Layout>
+      <Layout style={styles.topContainer} level='1'>
+        <Progres />
       </Layout>
       <Layout style={styles.topContainer} level='1'>
         <IMC />
