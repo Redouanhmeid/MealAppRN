@@ -3,6 +3,7 @@ import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Calendar, Layout, Text } from '@ui-kitten/components';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAngleLeft, faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import PlanMeal2 from './PlanMeal2';
 
 const LeftIcon = () => (
   <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>
@@ -47,7 +48,10 @@ const PlanMeal = () => {
   }
 
   return (
+    <>
+    <PlanMeal2 />
     <Layout style={styles.container} level='2'>
+      
       <View style={styles.viewclass}>
         <Button onPress={scrollToToday} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
         <Button appearance='ghost' style={styles.today} size='large'><CalendarIcon /> {selectedDate.toLocaleDateString('en-GB')} {tomorrow.toLocaleDateString('en-GB')}</Button>
@@ -62,6 +66,7 @@ const PlanMeal = () => {
       </View>
 
     </Layout>
+    </>
   );
 };
 
