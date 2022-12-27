@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, ImageBackground, Image, useWindowDimensions  } from 'react-native'
+import { View, ScrollView, StyleSheet, ImageBackground, useWindowDimensions  } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft, faClock } from '@fortawesome/free-solid-svg-icons'
@@ -45,7 +45,7 @@ const Article = ({navigation, route}) => {
       requestArticle(post)
     }, [isLoaded])
 
-    const renderBackAction = (): React.ReactElement => (
+    const renderBackAction = () => (
       <TopNavigationAction
         icon={BackIcon}
         onPress={() => navigation.goBack()}

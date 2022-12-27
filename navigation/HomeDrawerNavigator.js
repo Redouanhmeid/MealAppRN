@@ -68,18 +68,5 @@ const themedStyles = StyleService.create({
     height: 160,
     flexDirection: 'row',
     alignItems: 'center',
-  },/* 
-  profileContainer: {
-    flexDirection: "row",
-    alignItems: "center",
   },
-  profileName: {
-    marginHorizontal: 16,
-  },
-  
-  icon: {
-    width: 22,
-    height: 22,
-    marginRight: 8,
-  }, */
 }); 
