@@ -23,8 +23,8 @@ const Header = (props) => (
 );
 
 const IMC = () => {
-  const {userInfo, leadInfo} = useContext(AuthContext)
-  const values = { "taille": leadInfo.taille, "poidsactuel": leadInfo.poidsactuel}
+  const {userInfo, leadId} = useContext(AuthContext)
+  const values = { "taille": leadId.taille, "poidsactuel": leadId.poidsactuel}
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => {
     setIsModalVisible(true)

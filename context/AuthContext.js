@@ -9,8 +9,7 @@ export const AuthProvider = ({children}) => {
     const [isLoading, setIsLoading] = useState(true)
     const [userToken, setUserToken] = useState(null)
     const [userInfo, setUserInfo] =useState(null)
-    const [leadInfo, setLeadInfo] =useState('')
-
+    const [leadId, setLeadId] =useState(null)
 
     const login = (username, password) => {
         setIsLoading(true);
@@ -20,9 +19,17 @@ export const AuthProvider = ({children}) => {
                 let userInfo = res.data;
                 setUserInfo(userInfo);
                 setUserToken(userInfo.token);
-                AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-                AsyncStorage.setItem('userToken', userInfo.token);
-                requestLead(userInfo.user_email);
+                await AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+                await AsyncStorage.setItem('userToken', userInfo.token);
+                try {
+                    const res = await axios.get(`${BASE_URL}/wp-json/leads/mail/${userInfo.user_email}`)
+                    let LeadId = res.data[0]
+                    setLeadId(LeadId)
+                    await AsyncStorage.setItem('leadId', JSON.stringify(LeadId));
+                }
+                catch(err) {
+                    console.error(err);
+                }
             }
             catch(err) {
                 console.error(err);
@@ -31,19 +38,12 @@ export const AuthProvider = ({children}) => {
         requestInfo();
         setIsLoading(false);
     }
-    const requestLead = (mail) => {
-        axios.get(`${BASE_URL}/wp-json/leads/mail/${mail}`)
-        .then(res=>{
-            setLeadInfo(res.data[0])
-            AsyncStorage.setItem('leadInfo', JSON.stringify(res.data[0]));
-        })
-    }
     const logout = () => {
         setIsLoading(true);
         setUserToken(null);
         AsyncStorage.removeItem('userInfo');
         AsyncStorage.removeItem('userToken');
-        AsyncStorage.removeItem('leadInfo');
+        AsyncStorage.removeItem('leadId');
         setIsLoading(false);
     }
     const isLoggedIn = async() => {
@@ -51,12 +51,13 @@ export const AuthProvider = ({children}) => {
             setIsLoading(true)
             let userInfo = await AsyncStorage.getItem('userInfo')
             let userToken = await AsyncStorage.getItem('userToken')
-            let LeadInfo = await AsyncStorage.getItem('leadInfo')
+            let leadId = await AsyncStorage.getItem('leadId')
             userInfo = JSON.parse(userInfo)
+            leadId = JSON.parse(leadId)
             if( userInfo ) {
                 setUserToken(userToken)
                 setUserInfo(userInfo)
-                setLeadInfo(leadInfo)
+                setLeadId(leadId)
             }
             setIsLoading(false)
         } catch(e){
@@ -68,7 +69,7 @@ export const AuthProvider = ({children}) => {
     }, [])
 
     return (
-        <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo, leadInfo}}>
+        <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo, leadId}}>
             {children}
         </AuthContext.Provider>
     )

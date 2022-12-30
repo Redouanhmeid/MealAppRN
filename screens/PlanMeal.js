@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Calendar, Layout, Text } from '@ui-kitten/components';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAngleLeft, faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
-import PlanMeal2 from './PlanMeal2';
+import DatePicker from './DatePicker'
 
 const LeftIcon = () => (
   <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>
@@ -46,26 +46,19 @@ const PlanMeal = () => {
   const scrollToTomorrow = () => {
     tomorrow.setDate(today.getDate() + 1)
   }
-
   return (
     <>
-    <PlanMeal2 />
+    
     <Layout style={styles.container} level='2'>
       
       <View style={styles.viewclass}>
-        <Button onPress={scrollToToday} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
-        <Button appearance='ghost' style={styles.today} size='large'><CalendarIcon /> {selectedDate.toLocaleDateString('en-GB')} {tomorrow.toLocaleDateString('en-GB')}</Button>
-        <Button onPress={scrollToTomorrow} style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
-      </View>
-      <View style={styles.calendarContainer}>
-        <Calendar
-          ref={componentRef}
-          date={selectedDate}
-          initialVisibleDate={initialVisibleDate}
-          onSelect={nextDate => setSelectedDate(nextDate)} />
+        <Button style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
+        <Button appearance='ghost' style={styles.today} size='large'><CalendarIcon /> {tomorrow.toLocaleDateString('en-GB')}</Button>
+        <Button  style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
       </View>
 
     </Layout>
+    <DatePicker />
     </>
   );
 };

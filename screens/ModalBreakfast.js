@@ -1,9 +1,11 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions } from 'react-native'
-import React from 'react'
-import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout } from '@ui-kitten/components'
+import React, {useEffect, useState} from 'react'
+import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import Foods from '../assets/food2.json'
+import axios from 'axios'
+import { BASE_URL } from '../client-config'
 import { SafeAreaView } from 'react-native-safe-area-context'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -19,6 +21,7 @@ const BreakfastTitleModal = () => (
 );
 
 const ModalBreakfast = ({FromAgenda}) => {
+  const ProgId = FromAgenda.ProgramId
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
@@ -30,16 +33,43 @@ const ModalBreakfast = ({FromAgenda}) => {
     <View style={styles.CardHeader}>
       <Text style={styles.time}>&#128337; 10:00</Text>
       <Text>&#127859; 10 min</Text>
-      <Text>&#x1F525; {Foods[1].calories}</Text>
+      <Text>&#x1F525; {Foods.find(food => food.id == Repas).calories}</Text>
     </View>
   );
   const renderCardFooter = () => (
     <View style={styles.CardFooter}>
-      <Layout style={styles.macroleft}  ><Text category='h4'>{Foods[1].protein} g</Text><Text category='c1'>Protéines</Text></Layout>
-      <Layout style={styles.macrocenter}><Text category='h4'>{Foods[1].glucide} g</Text><Text category='c1'>Glucides</Text></Layout>
-      <Layout style={styles.macrocright}><Text category='h4'>{Foods[1].lipide} g</Text><Text category='c1'>Graisses</Text></Layout>
+      <Layout style={styles.macroleft}  ><Text category='h4'>{Foods.find(food => food.id == Repas).protein} g</Text><Text category='c1'>Protéines</Text></Layout>
+      <Layout style={styles.macrocenter}><Text category='h4'>{Foods.find(food => food.id == Repas).glucide} g</Text><Text category='c1'>Glucides</Text></Layout>
+      <Layout style={styles.macrocright}><Text category='h4'>{Foods.find(food => food.id == Repas).lipide} g</Text><Text category='c1'>Graisses</Text></Layout>
     </View>
   );
+  const [Repas, setRepas] = useState()
+  const [isLoaded, setIsLoaded] = useState(true)
+  
+  const requestRepas = async () => {
+    var params = {
+      url: `${BASE_URL}/wp-json/repas/idprogram/${ProgId}`,
+      method: 'get',
+      rejectUnauthorized: false,//add when working with https sites
+      requestCert: false,//add when working with https sites
+      agent: false,//add when working with https sites
+    }
+    const res = await axios(params);
+    setRepas(res.data[0].Repas[1])
+    setIsLoaded(false)
+  }
+
+  useEffect(() => {
+    requestRepas()
+  }, [ProgId, Repas, isLoaded])
+
+  if(isLoaded) {
+    return (
+      <Layout style={styles.spinnercontainer} level='1'>
+        <Spinner size='giant'/>
+      </Layout>
+    )
+  }
   return (
     <SafeAreaView style={styles.ModalContainer}>
       <TopNavigation style={styles.ModalTopContainer} title={BreakfastTitleModal} accessoryLeft={renderBackAction}/>
@@ -47,7 +77,7 @@ const ModalBreakfast = ({FromAgenda}) => {
         <ImageBackground
           style={styles.image}
           source={{
-            uri: Foods[1].img,
+            uri: Foods.find(food => food.id == Repas).img,
           }}
         />
         <Card
@@ -56,11 +86,11 @@ const ModalBreakfast = ({FromAgenda}) => {
           disabled={true}
           header={renderCardHeader}
           footer={renderCardFooter}>
-            <Text category='h3'>{Foods[19].foodName}</Text>
+            <Text category='h3'>{Foods.find(food => food.id == Repas).foodName}</Text>
         </Card>
         <Text category='h4' style={{marginHorizontal: 20}}>Description</Text>
         <Divider />
-        <Text style={styles.desc}>{Foods[2].description}</Text>
+        <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
         <Button style={{width: windowWidth-50}} size={'giant'}>Fait</Button>
@@ -72,6 +102,15 @@ const ModalBreakfast = ({FromAgenda}) => {
 export default ModalBreakfast
 
 const styles = StyleSheet.create({
+  spinnercontainer: {
+    flex:1,
+    flexDirection: 'column',
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor: '#fff',
+    width: windowWidth,
+    height: windowHeight,
+  },
   ModalContainer: {
     width: windowWidth,
     height: windowHeight,

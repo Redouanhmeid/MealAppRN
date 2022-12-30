@@ -23,11 +23,10 @@ const Header = (props) => (
 );
 
 const Objectifs = () => {
-  const {userInfo, leadInfo} = useContext(AuthContext)
+  const {userInfo, leadId} = useContext(AuthContext)
   const [objectif, setObjectif] = useState(null)
   useEffect(() => {
-    setObjectif(leadInfo.poidssouhaite - leadInfo.poidsactuel)
-    console.log(objectif)
+    setObjectif(leadId.poidssouhaite - leadId.poidsactuel)
   }, [objectif])
   
   return (

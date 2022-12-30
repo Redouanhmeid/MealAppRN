@@ -1,11 +1,14 @@
 import { StyleSheet, View, ScrollView, ImageBackground, Image, Dimensions, Avatar } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, Layout, Modal, List, ListItem, Button, TopNavigation, TopNavigationAction, Divider } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPlusCircle, faClose } from '@fortawesome/free-solid-svg-icons'
+import { AuthProvider, AuthContext } from '../context/AuthContext'
 import ModalBreakfast from '../screens/ModalBreakfast'
+import { BASE_URL } from '../client-config'
 import Foods from '../assets/food2.json'
+import axios from 'axios'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
@@ -66,7 +69,37 @@ const DinnerTitleModal = () => (
 
 
 const Nutrution = () => {
+  const {userInfo, leadId} = useContext(AuthContext);
+  const [isLoaded, setIsLoaded] = useState(true)
   const [visible, setVisible] = useState(false);
+  const [ProgramId, setProgramId] = useState()
+  console.log(userInfo, leadId)
+  const LeadId = leadId.Id
+  const NRepas = leadId.nrepas
+
+  const requestProgramId = async () => {
+    try {
+      var params = {
+        url: `${BASE_URL}/wp-json/repas/idprogrambylead/${LeadId}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      }
+      const res = await axios(params)
+      setProgramId(res.data[0].Id_Program)
+      setIsLoaded(false)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    if(LeadId !== undefined){
+      requestProgramId()
+    }
+  }, [ProgramId])
+
   return (
     <ScrollView>
       <Layout style={styles.container} level='2'>
@@ -97,7 +130,7 @@ const Nutrution = () => {
           />
 
         <Modal visible={visible}>
-          <ModalBreakfast FromAgenda={{setVisible}}/>
+          <ModalBreakfast FromAgenda={{setVisible, ProgramId}}/>
         </Modal>
       </Layout>
     </ScrollView>

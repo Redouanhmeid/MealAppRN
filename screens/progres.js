@@ -28,8 +28,8 @@ const Header = (props) => (
 );
 
 const Progres = () => {
-  const {userInfo, leadInfo} = useContext(AuthContext)
-  const poids = leadInfo.poidsactuel
+  const {userInfo, leadId} = useContext(AuthContext)
+  const poids = leadId.poidsactuel
   return (
     <Card style={styles.card} header={Header}>
         <LineChart
@@ -60,7 +60,7 @@ const Progres = () => {
         />
       <View style={styles.viewclass}>
         <Text category='h5'>Objectif</Text>
-        <Text category='h3'> {leadInfo.poidsactuel}Kg <RightLongIcon /> {leadInfo.poidsactuel}Kg <RightLongIcon /> {leadInfo.poidssouhaite}Kg</Text>
+        <Text category='h3'> {leadId.poidsactuel}Kg <RightLongIcon /> {leadId.poidsactuel}Kg <RightLongIcon /> {leadId.poidssouhaite}Kg</Text>
       </View>
     </Card>
   )
