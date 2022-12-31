@@ -1,9 +1,10 @@
-import React, { useState, createRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Calendar, Layout, Text } from '@ui-kitten/components';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAngleLeft, faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 import DatePicker from './DatePicker'
+import PlanMealChild from './PlanMealChild';
 
 const LeftIcon = () => (
   <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>
@@ -14,51 +15,46 @@ const RightIcon = (props) => (
 const CalendarIcon = (props) => (
   <FontAwesomeIcon icon={ faCalendarAlt } style={styles.icon} />
 );
-
 const windowWidth = Dimensions.get('window').width;
 
-const now = new Date();
-const date = new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-const initialVisibleDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-
-const today = new Date()
-let tomorrow =  new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
-
 const PlanMeal = () => {
+  const [ selectedDate, setSelectedDate ] = useState('Aujourd\'hui')
+  const childCompRef = useRef()
+  const [date, setDate] = useState(new Date())
+  let tempDate = new Date(date)
+  const tomDate = new Date()
+  tomDate.setDate(new Date().getDate() + 1)
+  let ftomorrowDate = tomDate.getDate() + '/' + (tomDate.getMonth() + 1) + '/' + tomDate.getFullYear()
   
-  const [ selectedDate, setSelectedDate ] = useState(date);
+  let ftodayDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
 
-  const componentRef = createRef(<Calendar />);
-
-  const scrollToSelected = () => {
-    if (componentRef.current) {
-      componentRef.current.scrollToDate(selectedDate);
-    }
-  };
-
-  const scrollToToday = () => {
-    if (componentRef.current) {
-      componentRef.current.scrollToToday();
-    }
-  };
-
-  const scrollToTomorrow = () => {
-    tomorrow.setDate(today.getDate() + 1)
-  }
+  const ystDate = new Date()
+  ystDate.setDate(new Date().getDate() - 1)
+  let fyesterdayDate = ystDate.getDate() + '/' + (ystDate.getMonth() + 1) + '/' + ystDate.getFullYear()
+  
+  
+  const [ selectedDateString, setSelectedDateString ] = useState()
+  useEffect(()=>{
+    if (selectedDate === ftodayDate){ setSelectedDateString('Aujourd\'hui') }
+    else if (selectedDate === fyesterdayDate){ setSelectedDateString('Hier') }
+    else if (selectedDate === ftomorrowDate){ setSelectedDateString('Demain') }
+    else { setSelectedDateString(selectedDate) }
+  }, [selectedDate])
+ 
   return (
     <>
-    
-    <Layout style={styles.container} level='2'>
+      <Layout style={styles.container} level='2'>
+        <View style={styles.viewclass}>
+          <Button style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
+          <Button onPress={() => childCompRef.current.showDatePicker()} appearance='ghost' style={styles.today} size='large'>
+            <CalendarIcon /> { selectedDateString }
+          </Button>
+          <Button style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
+        </View>
+        <PlanMealChild getD={selectedDate} />
+      </Layout>
+      <DatePicker ref={childCompRef} getD={selectedDate => setSelectedDate(selectedDate)} />
       
-      <View style={styles.viewclass}>
-        <Button style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
-        <Button appearance='ghost' style={styles.today} size='large'><CalendarIcon /> {tomorrow.toLocaleDateString('en-GB')}</Button>
-        <Button  style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
-      </View>
-
-    </Layout>
-    <DatePicker />
     </>
   );
 };
@@ -71,10 +67,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  calendarContainer: {
-    width: windowWidth,
-    margin: 30,
   },
   text: {
     marginVertical: 8,

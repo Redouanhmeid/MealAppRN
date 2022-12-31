@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView, ImageBackground, Image, Dimensions, Avatar } from 'react-native'
+import { StyleSheet, View, ScrollView, ImageBackground, Image, Avatar } from 'react-native'
 import React, {useEffect, useState, useContext} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text, Layout, Modal, List, ListItem, Button, TopNavigation, TopNavigationAction, Divider } from '@ui-kitten/components'
@@ -9,8 +9,6 @@ import ModalBreakfast from '../screens/ModalBreakfast'
 import { BASE_URL } from '../client-config'
 import Foods from '../assets/food2.json'
 import axios from 'axios'
-const windowWidth = Dimensions.get('screen').width
-const windowHeight = Dimensions.get('screen').height
 
 const RightIcon = (props) => (
   <FontAwesomeIcon icon={ faPlusCircle } style={styles.icon} size={ 28 }/>
@@ -101,8 +99,9 @@ const Nutrution = () => {
   }, [ProgramId])
 
   return (
-    <ScrollView>
+    
       <Layout style={styles.container} level='2'>
+        <ScrollView>
         <Text category='h4'>Nutrution</Text>
           <ListItem style={styles.listcontainer}
             title={BreakfastTitle}
@@ -132,8 +131,8 @@ const Nutrution = () => {
         <Modal visible={visible}>
           <ModalBreakfast FromAgenda={{setVisible, ProgramId}}/>
         </Modal>
+        </ScrollView>
       </Layout>
-    </ScrollView>
   )
 }
 
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    padding: 16,
+    padding: 20,
   },
   listcontainer: {
     minHeight: 80,
@@ -165,6 +164,4 @@ const styles = StyleSheet.create({
     fontWeight: "900",
     color: '#fff',
   },
- 
-  
 });
