@@ -21,11 +21,12 @@ const PlanMeal = () => {
   const [ selectedDate, setSelectedDate ] = useState('Aujourd\'hui')
   const childCompRef = useRef()
   const [date, setDate] = useState(new Date())
-  let tempDate = new Date(date)
+ 
   const tomDate = new Date()
   tomDate.setDate(new Date().getDate() + 1)
   let ftomorrowDate = tomDate.getDate() + '/' + (tomDate.getMonth() + 1) + '/' + tomDate.getFullYear()
   
+  const tempDate = new Date(date)
   let ftodayDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
 
   const ystDate = new Date()
