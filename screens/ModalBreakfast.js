@@ -1,11 +1,9 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 import Foods from '../assets/food2.json'
-import axios from 'axios'
-import { BASE_URL } from '../client-config'
 import { SafeAreaView } from 'react-native-safe-area-context'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -20,12 +18,13 @@ const BreakfastTitleModal = () => (
   <Text category='h5' style={styles.titlemodal}>Petit-déjeuner</Text>
 );
 
-const ModalBreakfast = ({FromAgenda}) => {
-  const ProgId = FromAgenda.ProgramId
+const ModalBreakfast = ({toModalBreakfast}) => {
+  const Repas = toModalBreakfast.Repas1
+  
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
-      onPress={() => FromAgenda.setVisible(false)}
+      onPress={() => toModalBreakfast.setVisible(false)}
     />
   );
 
@@ -43,33 +42,7 @@ const ModalBreakfast = ({FromAgenda}) => {
       <Layout style={styles.macrocright}><Text category='h4'>{Foods.find(food => food.id == Repas).lipide} g</Text><Text category='c1'>Graisses</Text></Layout>
     </View>
   );
-  const [Repas, setRepas] = useState()
-  const [isLoaded, setIsLoaded] = useState(true)
-  
-  const requestRepas = async () => {
-    var params = {
-      url: `${BASE_URL}/wp-json/repas/idprogram/${ProgId}`,
-      method: 'get',
-      rejectUnauthorized: false,//add when working with https sites
-      requestCert: false,//add when working with https sites
-      agent: false,//add when working with https sites
-    }
-    const res = await axios(params);
-    setRepas(res.data[0].Repas[1])
-    setIsLoaded(false)
-  }
 
-  useEffect(() => {
-    requestRepas()
-  }, [ProgId, Repas, isLoaded])
-
-  if(isLoaded) {
-    return (
-      <Layout style={styles.spinnercontainer} level='1'>
-        <Spinner size='giant'/>
-      </Layout>
-    )
-  }
   return (
     <SafeAreaView style={styles.ModalContainer}>
       <TopNavigation style={styles.ModalTopContainer} title={BreakfastTitleModal} accessoryLeft={renderBackAction}/>

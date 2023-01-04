@@ -76,6 +76,7 @@ const Apprendre = ({navigation }) => {
   return (
     <Layout style={styles.container} level='1'>
       <ScrollView>
+      <Text category='h1'>  Apprendre</Text>
        {posts.map((post, index) => (
         <Card key={index} appearance="outline" style={styles.details} onPress={() => navigation.navigate('Article', {post: post.id, fm: requestFM(post.featured_media)})}>
           <Image
@@ -99,7 +100,9 @@ const styles = StyleSheet.create({
     flex:1,
     flexDirection: 'column',
     justifyContent:'center',
-    alignItems:'center'
+    alignItems:'center',
+    paddingHorizontal: 10,
+    paddingTop: 50,
   },
   details: {
     flexDirection: 'row',

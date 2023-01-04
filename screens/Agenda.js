@@ -1,14 +1,12 @@
-import { StyleSheet, View, ScrollView, ImageBackground, Image, Avatar } from 'react-native'
-import React, {useEffect, useState, useContext} from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Text, Layout, Modal, List, ListItem, Button, TopNavigation, TopNavigationAction, Divider } from '@ui-kitten/components'
+import { StyleSheet, View, ScrollView, Image } from 'react-native'
+import React, {useState, useEffect, useContext} from 'react'
+import { Text, Layout, Modal, ListItem, Button, Divider } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faPlusCircle, faClose } from '@fortawesome/free-solid-svg-icons'
-import { AuthProvider, AuthContext } from '../context/AuthContext'
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import ModalBreakfast from '../screens/ModalBreakfast'
-import { BASE_URL } from '../client-config'
-import Foods from '../assets/food2.json'
+import { AuthContext } from '../context/AuthContext'
 import axios from 'axios'
+import { BASE_URL } from '../client-config'
 
 const RightIcon = (props) => (
   <FontAwesomeIcon icon={ faPlusCircle } style={styles.icon} size={ 28 }/>
@@ -37,9 +35,6 @@ const DinnerImage = (props) => (
     source={require('../assets/dinner.png')}
   />
 );
-const CloseIcon = () => (
-  <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
-);
 const BreakfastTitle = () => (
   <Text category='h6'>Petit-déjeuner</Text>
 );
@@ -65,42 +60,50 @@ const DinnerTitleModal = () => (
   <Text category='h5' style={styles.titlemodal}>Dîner</Text>
 );
 
-
 const Nutrution = () => {
-  const {userInfo, leadId} = useContext(AuthContext);
-  const [isLoaded, setIsLoaded] = useState(true)
-  const [visible, setVisible] = useState(false);
-  const [ProgramId, setProgramId] = useState()
-  console.log(userInfo, leadId)
+  const {userInfo, leadId, programId} = useContext(AuthContext)
   const LeadId = leadId.Id
   const NRepas = leadId.nrepas
+  const [visible, setVisible] = useState(false)
+  const [Repas1, setRepas1] = useState()
+  const [Repas2, setRepas2] = useState()
+  const [Repas3, setRepas3] = useState()
+  const [Repas4, setRepas4] = useState()
+  const [Repas5, setRepas5] = useState()
+  const [day, setDay] = useState()
+  let tempDate = new Date()
+  let ftodayDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
 
-  const requestProgramId = async () => {
+  useEffect(() => {
+    requestRepas(programId, ftodayDate)
+  }, [programId])
+
+  const requestRepas = async (Item, day) => {
     try {
       var params = {
-        url: `${BASE_URL}/wp-json/repas/idprogrambylead/${LeadId}`,
+        url: `${BASE_URL}/wp-json/repas/idrepas/idprog=${Item}/repasday=${day}`,
         method: 'get',
         rejectUnauthorized: false,//add when working with https sites
         requestCert: false,//add when working with https sites
         agent: false,//add when working with https sites
       }
       const res = await axios(params)
-      setProgramId(res.data[0].Id_Program)
-      setIsLoaded(false)
+      setRepas1(res.data[0].Repas[1])
+      setRepas2(res.data[0].Repas[3])
+      setRepas3(res.data[0].Repas[5])
+      if(res.data[0].Repas[7] !== undefined || null){
+        setRepas4(res.data[0].Repas[7])
+      }
+      if(res.data[0].Repas[9] !== undefined || null){
+        setRepas5(res.data[0].Repas[9])
+      }
     } catch (error) {
       console.error(error);
     }
   }
-
-  useEffect(() => {
-    if(LeadId !== undefined){
-      requestProgramId()
-    }
-  }, [ProgramId])
-
   return (
-    
       <Layout style={styles.container} level='2'>
+        <Text category='h1'>Agenda</Text>
         <ScrollView>
         <Text category='h4'>Nutrution</Text>
           <ListItem style={styles.listcontainer}
@@ -129,7 +132,7 @@ const Nutrution = () => {
           />
 
         <Modal visible={visible}>
-          <ModalBreakfast FromAgenda={{setVisible, ProgramId}}/>
+          <ModalBreakfast toModalBreakfast={{setVisible, Repas1}}/>
         </Modal>
         </ScrollView>
       </Layout>
@@ -142,7 +145,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 50,
   },
   listcontainer: {
     minHeight: 80,

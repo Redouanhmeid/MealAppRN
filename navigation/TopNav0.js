@@ -4,7 +4,6 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { BottomNavigation, BottomNavigationTab, Layout } from '@ui-kitten/components'
 import { BottomTabs } from './BottomTabs'
-import HomeDrawerNavigator from './HomeDrawerNavigator'
 
 function Home() {
   return (

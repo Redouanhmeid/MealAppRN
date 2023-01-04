@@ -21,19 +21,23 @@ const Moi = () => {
   );
   return (
     <ScrollView>
-      <TopNavigation style={styles.ModalTopContainer} accessoryRight={renderBackAction}/>
-      {/* <Text>Bonjour {userInfo.user_display_name}</Text> */}
-      <Layout style={styles.topContainer} level='1'>
-        <Defis />
-      </Layout>
-      <Layout style={styles.topContainer} level='1'>
-        <Objectifs />
-      </Layout>
-      <Layout style={styles.topContainer} level='1'>
-        <Progres />
-      </Layout>
-      <Layout style={styles.topContainer} level='1'>
-        <IMC />
+      <Layout style={styles.container} level='2'>
+        
+        <TopNavigation style={styles.ModalTopContainer} accessoryRight={renderBackAction}/>
+       
+        <Text category='h1'>  Moi</Text>
+        <Layout style={styles.topContainer} level='1'>
+          <Defis />
+        </Layout>
+        <Layout style={styles.topContainer} level='1'>
+          <Objectifs />
+        </Layout>
+        <Layout style={styles.topContainer} level='1'>
+          <Progres />
+        </Layout>
+        <Layout style={styles.topContainer} level='1'>
+          <IMC />
+        </Layout>
       </Layout>
     </ScrollView>
   )
@@ -42,6 +46,11 @@ const Moi = () => {
 export default Moi
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    paddingVertical: 50,
+  },
   topContainer: {
     flexDirection: 'column',
     margin: 16,

@@ -19,6 +19,8 @@ const windowWidth = Dimensions.get('window').width;
 
 const PlanMeal = () => {
   const [ selectedDate, setSelectedDate ] = useState('Aujourd\'hui')
+  const [MinDate, setMinDate] = useState()
+  const [MaxDate, setMaxDate] = useState()
   const childCompRef = useRef()
   const [date, setDate] = useState(new Date())
  
@@ -40,22 +42,22 @@ const PlanMeal = () => {
     else if (selectedDate === fyesterdayDate){ setSelectedDateString('Hier') }
     else if (selectedDate === ftomorrowDate){ setSelectedDateString('Demain') }
     else { setSelectedDateString(selectedDate) }
-  }, [selectedDate])
+  }, [selectedDate, MinDate, MaxDate])
  
   return (
     <>
       <Layout style={styles.container} level='2'>
+      <Text category='h1'>  Plan de repas</Text>
         <View style={styles.viewclass}>
-          <Button style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
+          <Button onPress={() => childCompRef.current.prevDay()} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
           <Button onPress={() => childCompRef.current.showDatePicker()} appearance='ghost' style={styles.today} size='large'>
             <CalendarIcon /> { selectedDateString }
           </Button>
-          <Button style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
+          <Button onPress={() => childCompRef.current.nextDay()} style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
         </View>
-        <PlanMealChild getD={selectedDate} />
+        <PlanMealChild getD={selectedDate} getMinDate={MinDate => setMinDate(MinDate)} getMaxDate={MaxDate => setMaxDate(MaxDate)}/>
       </Layout>
-      <DatePicker ref={childCompRef} getD={selectedDate => setSelectedDate(selectedDate)} />
-      
+      <DatePicker ref={childCompRef} getD={selectedDate => setSelectedDate(selectedDate)} MinDate={MinDate} MaxDate={MaxDate}/>
     </>
   );
 };
@@ -68,6 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingVertical: 50,
   },
   text: {
     marginVertical: 8,

@@ -35,7 +35,7 @@ const Progres = () => {
         <LineChart
             data={{
                 /* labels: ["lun", "mar", "mer", "jeu", "ven", "sam", "dim"], */
-                datasets: [{data: [poids, 50, 53, 59, 62, 67, 69]}]
+                datasets: [{data: [poids, 80, 78, 84, 87, 88]}]
             }}
             width={330} // from react-native
             height={300}

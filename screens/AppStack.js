@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import TopNav from '../navigation/TopNav'
 import BottomTabs from '../navigation/BottomTabs'
 import { ApplicationProvider, BottomNavigation, BottomNavigationTab, IconRegistry, Layout } from '@ui-kitten/components'
 import AppNavigator from '../navigation/AppNavigator'
