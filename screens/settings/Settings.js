@@ -1,13 +1,19 @@
 import { View, StyleSheet } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import { Layout, Menu, MenuGroup, MenuItem, Divider, TopNavigationAction, TopNavigation } from '@ui-kitten/components'
+import { Layout, Menu, MenuItem, Divider, TopNavigationAction, TopNavigation } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAngleRight, faArrowLeft, faArrowRightFromBracket, faStar, faInfo, faClipboardList, faBell, faUserAlt, faPlateWheat } from '@fortawesome/free-solid-svg-icons'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Nutrution from './Nutrution'
+import Compte from './Compte'
+import Notifications from './Notifications'
+import Detailspersonels from './Detailspersonels'
+import Aide from './Aide'
+import Nousnoter from './Nousnoter'
 
 const RightIcon = () => (
-  <FontAwesomeIcon icon={ faAngleRight } color='#C628A4'  />
+  <FontAwesomeIcon icon={ faAngleRight } size={ 24 } color='#C628A4'  />
 );
 const BackIcon = () => (
   <FontAwesomeIcon icon={ faArrowLeft } size={ 28 } />
@@ -34,10 +40,9 @@ const LogoutIcon = () => (
   <FontAwesomeIcon icon={ faArrowRightFromBracket } size={ 24 } color='#C628A4' />
 );
 
-
-const Settings = ({navigation}) => {
+const Settings = ({navigation, state}) => {
   const {logout} = useContext(AuthContext);
-  const [selectedIndex, setSelectedIndex] = useState(null)
+  const [selectedIndex, setSelectedIndex] = useState(0)
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
@@ -52,8 +57,8 @@ const Settings = ({navigation}) => {
         <Menu
           style={styles.menu}
           selectedIndex={selectedIndex}
-          onSelect={(index) => setSelectedIndex(index)}>
-          <MenuItem title='Nutrution' style={styles.menuitem} accessoryLeft={DietIcon} accessoryRight={RightIcon} />
+          onSelect={(index) => {setSelectedIndex(index), console.log(index)}}>
+          <MenuItem title='Nutrution' style={styles.menuitem} accessoryLeft={DietIcon} accessoryRight={RightIcon} onPress={() => navigation.navigate('Nutrution')} />
           <MenuItem title='Compte' style={styles.menuitem} accessoryLeft={UserIcon} accessoryRight={RightIcon} />
           <MenuItem title='Notifications' style={styles.menuitem} accessoryLeft={NotificationsIcon} accessoryRight={RightIcon} />
         
@@ -81,7 +86,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   menuitem: {
-    paddingHorizontal: 5,
+    paddingHorizontal: 12,
     height: 65,
   },
   menutop: {
