@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingVertical: 50,
+    paddingTop: 40,
   },
   text: {
     marginVertical: 8,

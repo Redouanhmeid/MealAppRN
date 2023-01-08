@@ -70,7 +70,6 @@ const Nutrution = () => {
   const [Repas3, setRepas3] = useState()
   const [Repas4, setRepas4] = useState()
   const [Repas5, setRepas5] = useState()
-  const [day, setDay] = useState()
   let tempDate = new Date()
   let ftodayDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
 
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     paddingHorizontal: 20,
-    paddingVertical: 50,
+    paddingTop: 40,
   },
   listcontainer: {
     minHeight: 80,

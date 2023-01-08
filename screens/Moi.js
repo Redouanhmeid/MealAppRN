@@ -1,6 +1,5 @@
 import { ScrollView, StyleSheet } from 'react-native'
-import React, { useContext } from 'react'
-import { AuthContext } from '../context/AuthContext'
+import React from 'react'
 import { Text, Layout, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import Defis from './defis'
 import Objectifs from './objectifs';
@@ -11,18 +10,17 @@ import { faGear } from '@fortawesome/free-solid-svg-icons'
 const CloseIcon = () => (
   <FontAwesomeIcon icon={ faGear } style={styles.closeicon} size={ 40 }/>
 );
-const Moi = () => {
-  const {logout} = useContext(AuthContext);
+const Moi = ({ navigation }) => {
+  
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
-      onPress={() => logout()}
+      onPress={() => navigation.navigate('Paramètres')}
     />
   );
   return (
-    <ScrollView>
-      <Layout style={styles.container} level='2'>
-        
+    <Layout style={styles.container} level='2'>
+      <ScrollView>
         <TopNavigation style={styles.ModalTopContainer} accessoryRight={renderBackAction}/>
        
         <Text category='h1'>  Moi</Text>
@@ -38,8 +36,8 @@ const Moi = () => {
         <Layout style={styles.topContainer} level='1'>
           <IMC />
         </Layout>
-      </Layout>
-    </ScrollView>
+      </ScrollView>
+    </Layout>
   )
 }
 
@@ -49,7 +47,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    paddingVertical: 50,
+    paddingTop: 40,
   },
   topContainer: {
     flexDirection: 'column',

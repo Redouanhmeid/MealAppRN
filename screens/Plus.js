@@ -1,11 +1,24 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
+import { Button, Popover, Layout, Text } from '@ui-kitten/components'
 
 const Plus = () => {
+  const [visible, setVisible] = useState(false)
+
+  const renderToggleButton = () => (
+    <Button onPress={() => setVisible(true)}>
+      TOGGLE POPOVER
+    </Button>
+  );
+
   return (
-    <View>
+    <Popover
+      visible={visible}
+      anchor={renderToggleButton}
+      fullWidth={true}
+      onBackdropPress={() => setVisible(false)}
+    >
       <Text>Plus</Text>
-    </View>
+    </Popover>
   )
 }
 

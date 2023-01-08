@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView, ImageBackground, Dimensions } from 'react-native'
+import { View, StyleSheet, ScrollView, ImageBackground, Dimensions, StatusBar } from 'react-native'
 import React from 'react'
 import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -45,6 +45,7 @@ const ModalBreakfast = ({toModalBreakfast}) => {
 
   return (
     <SafeAreaView style={styles.ModalContainer}>
+      <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
       <TopNavigation style={styles.ModalTopContainer} title={BreakfastTitleModal} accessoryLeft={renderBackAction}/>
       <ScrollView style={styles.container}>
         <ImageBackground

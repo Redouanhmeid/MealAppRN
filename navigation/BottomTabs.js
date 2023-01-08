@@ -12,38 +12,40 @@ import Moi from '../screens/Moi'
 import Plus from '../screens/Plus'
 const { Navigator, Screen } = createBottomTabNavigator();
 
-const CalendarIcon = () => (
-  <FontAwesomeIcon icon={ faCalendarAlt } />
+const CalendarIcon = ({icst}) => (
+  <FontAwesomeIcon icon={ faCalendarAlt } style={icst === 0 ? styles.active : styles.unactive} />
 );
-const KanbanIcon = () => (
-  <FontAwesomeIcon icon={ faChartSimple } />
+const KanbanIcon = ({icst}) => (
+  <FontAwesomeIcon icon={ faChartSimple } style={icst === 1 ? styles.active : styles.unactive} />
 );
 const PlusIcon = () => (
-  <FontAwesomeIcon icon={ faPlusCircle } mask="circle" size={ 48 } color={'#DB2DB1'} />
+  <FontAwesomeIcon icon={ faPlusCircle } mask="circle" size={ 48 } style={styles.plus}/>
 );
-const MealIcon = () => (
-  <FontAwesomeIcon icon={ faPlateWheat } />
+const MealIcon = ({icst}) => (
+  <FontAwesomeIcon icon={ faPlateWheat } style={icst === 3 ? styles.active : styles.unactive} />
 );
-const UserIcon = () => (
-  <FontAwesomeIcon icon={ faUserCircle } />
+const UserIcon = ({icst}) => (
+  <FontAwesomeIcon icon={ faUserCircle } style={icst === 4 ? styles.active : styles.unactive} />
 );
 
-const BottomTabsBar = ({ navigation, state }) => (
+const BottomTabsBar = ({ navigation, state }) => {
+  const [icst, setIcst] = useState(0)
+return (
   <View>
     <Divider />
     <BottomNavigation
       style={styles.tabBar}
       selectedIndex={state.index}
-      indicatorStyle={{backgroundColor: '#000', height: 4}}
-      onSelect={index => navigation.navigate(state.routeNames[index])} >
-      <BottomNavigationTab title='Agenda' icon={CalendarIcon} />
-      <BottomNavigationTab title='Apprendre' icon={KanbanIcon} />
+      indicatorStyle={{backgroundColor: '#000', height: 0}}
+      onSelect={index => {navigation.navigate(state.routeNames[index]), setIcst(index)}} >
+      <BottomNavigationTab title='Agenda' icon={<CalendarIcon icst={icst} />} />
+      <BottomNavigationTab title='Apprendre' icon={<KanbanIcon icst={icst} />} />
       <BottomNavigationTab icon={PlusIcon} />
-      <BottomNavigationTab title='Plan meal' icon={MealIcon} />
-      <BottomNavigationTab title='Moi' icon={UserIcon} />
+      <BottomNavigationTab title='Plan meal' icon={<MealIcon icst={icst} />} />
+      <BottomNavigationTab title='Moi' icon={<UserIcon icst={icst} />} />
     </BottomNavigation>
   </View>
-)
+)}
 
 export const BottomTabs = () => (
   <Navigator tabBar={props => <BottomTabsBar {...props} />}>
@@ -57,6 +59,17 @@ export const BottomTabs = () => (
 
 const styles = StyleSheet.create({
   tabBar: {
-      borderTopColor: '#ddd',
+    borderTopColor: '#f7f9fc',
+    borderTopWidth: 1,
   },
+  plus: {
+    bottom: 12,
+    color: '#DB2DB1',
+  },
+  unactive: {
+    color: '#111',
+  },
+  active: {
+    color: '#DB2DB1'
+  }
 })

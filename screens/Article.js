@@ -9,7 +9,7 @@ import axios from 'axios'
 import RenderHTML from 'react-native-render-html'
 
 const BackIcon = () => (
-  <FontAwesomeIcon icon={ faArrowLeft } />
+  <FontAwesomeIcon icon={ faArrowLeft } size={ 28 } />
 );
 const ClockIcon = () => (
   <FontAwesomeIcon icon={ faClock } />

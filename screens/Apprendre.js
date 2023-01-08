@@ -1,15 +1,21 @@
-import { View, StyleSheet, Image, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, StyleSheet, Image, ScrollView, TouchableOpacity, Alert, RefreshControl } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Card, Divider, Layout, Spinner, Text } from '@ui-kitten/components'
 import { BASE_URL } from '../client-config'
 import axios from 'axios'
 import Article from './Article'
+import { waitForDebugger } from 'inspector'
 
-const Apprendre = ({navigation }) => {
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+const Apprendre = ({ navigation }) => {
   
   const [isLoaded, setIsLoaded] = useState(true)
   const [posts, setPosts] = useState([])
   const [urlArray, setUrlArray] = useState([])
+  const [refreshing, setRefreshing] = useState(false);
 
   const requestArticles = async () => {
     try {
@@ -58,6 +64,11 @@ const Apprendre = ({navigation }) => {
     return item?.uri
   }
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false))
+  }, [])
+
   useEffect(() => {
     requestArticles()
       setUrlArray([])
@@ -68,26 +79,35 @@ const Apprendre = ({navigation }) => {
 
   if(isLoaded) {
     return (
-      <Layout style={styles.container} level='1'>
+      <Layout style={styles.indicator} level='1'>
         <Spinner size='giant'/>
       </Layout>
     )
   }
   return (
-    <Layout style={styles.container} level='1'>
-      <ScrollView>
+    <Layout style={styles.container} level='2'>
       <Text category='h1'>  Apprendre</Text>
-       {posts.map((post, index) => (
-        <Card key={index} appearance="outline" style={styles.details} onPress={() => navigation.navigate('Article', {post: post.id, fm: requestFM(post.featured_media)})}>
-          <Image
-            style={styles.header}
-            source={{
-              uri: requestFM(post.featured_media),
-            }}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
-          <Text category='s1'>{post.title.rendered}</Text>
-        </Card>
-       ))}
+        }
+      >
+        
+        {posts.map((post, index) => (
+          <Card key={index} appearance="outline" style={styles.details} onPress={() => navigation.navigate('Article', {post: post.id, fm: requestFM(post.featured_media)})}>
+            <Image
+              style={styles.header}
+              source={{
+                uri: requestFM(post.featured_media),
+              }}
+            />
+            <Text category='s1'>{post.title.rendered}</Text>
+          </Card>
+        ))}
+      
       </ScrollView>
     </Layout>
   )
@@ -96,13 +116,19 @@ const Apprendre = ({navigation }) => {
 export default Apprendre
 
 const styles = StyleSheet.create({
+  indicator: {
+    flex:1,
+    flexDirection: 'column',
+    justifyContent:'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
   container: {
     flex:1,
     flexDirection: 'column',
     justifyContent:'center',
-    alignItems:'center',
     paddingHorizontal: 10,
-    paddingTop: 50,
+    paddingTop: 40,
   },
   details: {
     flexDirection: 'row',
@@ -110,6 +136,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     borderColor:0,
     marginTop: 8,
+    backgroundColor: '#f7f9fc',
   },
   title: {
     marginHorizontal: 4,
