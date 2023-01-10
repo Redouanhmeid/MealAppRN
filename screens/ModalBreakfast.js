@@ -67,7 +67,7 @@ const ModalBreakfast = ({toModalBreakfast}) => {
         <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
-        <Button style={{width: windowWidth-50}} size={'giant'}>Fait</Button>
+        <Button style={{width: windowWidth-50}} size={'large'}>Fait</Button>
       </Layout>
     </SafeAreaView>
   )
@@ -167,21 +167,20 @@ const styles = StyleSheet.create({
   },
   bookingCard: {
     backgroundColor: '#f8f8f8',
-    marginTop: -40,
+    marginTop: -47,
     margin: 20,
     borderRadius: 10,
   },
   bottom: {
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'absolute',
-    height: 100,
-    bottom: 0,
+    height: 90,
+    bottom: 40,
     width: windowWidth,
-    shadowColor: "#000",
+    shadowColor: "#000000",
     shadowOffset: {
       width: 0,
-      height: 6,
+      height: 3,
     },
     shadowOpacity: 1,
     elevation: 15,

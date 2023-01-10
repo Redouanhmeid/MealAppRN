@@ -49,6 +49,20 @@ export const AuthProvider = ({children}) => {
         setIsLoading(false);
     }
 
+    const UpdateLeadStorage = async () => {
+        var paramsId = {
+            url: `${BASE_URL}/wp-json/leads/mail/${userInfo.user_email}`,
+            method: 'get',
+            rejectUnauthorized: false,//add when working with https sites
+            requestCert: false,//add when working with https sites
+            agent: false,//add when working with https sites
+          }
+        const resId = await axios(paramsId)
+        let LeadId = resId.data[0]
+        await setLeadId(resId.data[0])
+        await AsyncStorage.setItem('leadId', JSON.stringify(resId.data[0]))
+    }
+
     const logout = () => {
         setIsLoading(true);
         setUserToken(null);
@@ -83,7 +97,7 @@ export const AuthProvider = ({children}) => {
     }, [programId])
 
     return (
-        <AuthContext.Provider value={{login, logout, isLoading, userToken, userInfo, leadId, programId}}>
+        <AuthContext.Provider value={{login, logout, UpdateLeadStorage, isLoading, userToken, userInfo, leadId, programId}}>
             {children}
         </AuthContext.Provider>
     )

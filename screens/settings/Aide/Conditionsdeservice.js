@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Aide = () => {
+const Conditionsdeservice = () => {
   return (
     <View>
-      <Text>Aide</Text>
+      <Text>Conditionsdeservice</Text>
     </View>
   )
 }
 
-export default Aide
+export default Conditionsdeservice

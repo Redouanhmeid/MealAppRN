@@ -47,7 +47,7 @@ const PlanMeal = () => {
   return (
     <>
       <Layout style={styles.container} level='2'>
-      <Text category='h1'>  Plan de repas</Text>
+        <Text category='h1'>  Plan de repas</Text>
         <View style={styles.viewclass}>
           <Button onPress={() => childCompRef.current.prevDay()} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
           <Button onPress={() => childCompRef.current.showDatePicker()} appearance='ghost' style={styles.today} size='large'>
