@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
@@ -10,11 +10,15 @@ import Plus from '../screens/Plus'
 import PlanMea from '../screens/PlanMeal'
 import Moi from '../screens/Moi'
 import PlanMeal from '../screens/PlanMeal';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import BottomSheet from '../screens/BottomSheet';
 
 const Tab = createBottomTabNavigator();
 
-function BottomTabs2 () {
+const BottomTabs2 = () => {
+  const ref = useRef()
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Tab.Navigator
         initialRouteName="Agenda"
         mode="Modal"
@@ -43,7 +47,7 @@ function BottomTabs2 () {
           listeners={({ navigation }) => ({
             tabPress: (e) => {
               e.preventDefault()
-            console.log('gg')
+              ref?.current?.scrollTo(300)
             },
           })}
         />
@@ -58,6 +62,8 @@ function BottomTabs2 () {
           }}
         />
       </Tab.Navigator>
+      <BottomSheet ref={ref} />
+    </GestureHandlerRootView>
   )
 }
 
