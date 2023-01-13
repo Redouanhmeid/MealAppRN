@@ -21,6 +21,7 @@ import Conditionsdabonnement from '../screens/settings/Aide/Conditionsdabonnemen
 import Politiquedeconfidentialite from '../screens/settings/Aide/Politiquedeconfidentialite'
 import Politiquederemboursement from '../screens/settings/Aide/Politiquederemboursement'
 import ReglesdeCommunication from '../screens/settings/Aide/ReglesdeCommunication'
+import BottomTabs2 from './BottomTabs2'
 
 
 const { Navigator, Screen } = createStackNavigator();
@@ -35,7 +36,7 @@ const AppNavigator = () => {
             cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
           }}
         >
-            <Screen name={'Accueil'} component={BottomTabs} />
+            <Screen name={'Accueil'} component={BottomTabs2} />
             <Screen name={'Article'}  component={Article} />
             <Screen name={'Paramètres'} component={Settings} />
             <Screen name={'Nutrution'} component={Nutrution} />
