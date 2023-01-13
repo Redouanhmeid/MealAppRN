@@ -3,20 +3,16 @@ import React from 'react'
 import BottomTabs from '../navigation/BottomTabs'
 import { ApplicationProvider, BottomNavigation, BottomNavigationTab, IconRegistry, Layout } from '@ui-kitten/components'
 import AppNavigator from '../navigation/AppNavigator'
-import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { default as theme } from '../theme.json'
 import * as eva from '@eva-design/eva'
 
 const AppStack = () => {
   return (
-    <>
-      <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
         <Layout style={styles.container} level='1'>
           <AppNavigator />
         </Layout>
       </ApplicationProvider>
-    </>
   )
 }
 
