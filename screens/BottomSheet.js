@@ -28,8 +28,8 @@ const BottomSheet = (props, ref) => {
     })
     .onEnd(() => {
       if (translateY.value > -SCREEN_HEIGHT/3) {
-        scrollTo(50)
-      } else if (translateY.value > +SCREEN_HEIGHT/1.5) {
+        scrollTo(0)
+      } else if (translateY.value > -SCREEN_HEIGHT/1.5) {
         scrollTo(MAX_TRANSLATE_Y)
       }
     })
@@ -45,7 +45,7 @@ const BottomSheet = (props, ref) => {
     <GestureDetector gesture={gesture}>
       <Animated.View style={[styles.bottomSheetContainer, rBootomSheetStyle]} >
         <View style={styles.line} />
-        <Button >close</Button>
+        <Button onPress={() => scrollTo(10)} >close</Button>
       </Animated.View>
     </GestureDetector>
   )

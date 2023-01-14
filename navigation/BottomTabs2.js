@@ -6,19 +6,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCalendarAlt, faChartSimple, faPlusCircle, faKitchenSet, faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import Agenda from '../screens/Agenda'
 import Apprendre from '../screens/Apprendre'
-import Plus from '../screens/Plus'
+import Plus from '../screens/plus/plus'
 import PlanMea from '../screens/PlanMeal'
 import Moi from '../screens/Moi'
 import PlanMeal from '../screens/PlanMeal';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import BottomSheet from '../screens/BottomSheet';
+import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabs2 = () => {
-  const ref = useRef()
+  const bottomSheetModalRef = useRef(null)
+  const snapPoints = ['36%']
+  function handlePresentModal() {
+    bottomSheetModalRef.current?.present();
+  }
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <BottomSheetModalProvider>
       <Tab.Navigator
         initialRouteName="Agenda"
         mode="Modal"
@@ -44,10 +47,10 @@ const BottomTabs2 = () => {
             tabBarLabel: '',
             tabBarIcon: ({focused, size}) => (<FontAwesomeIcon icon={ faPlusCircle } mask="circle" size={ 48 } style={styles.plus} />),
           }} 
-          listeners={({ navigation }) => ({
+          listeners={() => ({
             tabPress: (e) => {
               e.preventDefault()
-              ref?.current?.scrollTo(300)
+              handlePresentModal()
             },
           })}
         />
@@ -62,8 +65,15 @@ const BottomTabs2 = () => {
           }}
         />
       </Tab.Navigator>
-      <BottomSheet ref={ref} />
-    </GestureHandlerRootView>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        backgroundStyle={{borderRadius: 25, backgroundColor: '#fff',}}
+      >
+        <Plus />
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
   )
 }
 

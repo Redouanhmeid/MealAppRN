@@ -9,7 +9,7 @@ import Apprendre from '../screens/Apprendre'
 import PlanMeal from '../screens/PlanMeal'
 import Agenda from '../screens/Agenda'
 import Moi from '../screens/Moi'
-import Plus from '../screens/Plus'
+import Plus from '../screens/plus/plus'
 const { Navigator, Screen } = createBottomTabNavigator();
 
 const CalendarIcon = ({icst}) => (
