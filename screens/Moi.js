@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet } from 'react-native'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Text, Layout, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import Defis from './defis'
 import Objectifs from './objectifs';
@@ -11,15 +11,15 @@ const CloseIcon = () => (
   <FontAwesomeIcon icon={ faGear } style={styles.closeicon} size={ 40 }/>
 );
 const Moi = ({ navigation }) => {
-  
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
       onPress={() => navigation.navigate('Paramètres')}
     />
   );
+  
   return (
-    <Layout style={styles.container} level='2'>
+    <Layout style={styles.container } level='2'>
       <ScrollView>
         <TopNavigation style={styles.ModalTopContainer} accessoryRight={renderBackAction}/>
        

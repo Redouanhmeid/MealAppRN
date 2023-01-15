@@ -14,8 +14,6 @@ const BackIcon = () => (
 
 const Assistance = ({navigation}) => {
   const {leadId} = useContext(AuthContext)
-
-  console.log(leadId)
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}

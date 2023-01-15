@@ -22,8 +22,8 @@ import Politiquedeconfidentialite from '../screens/settings/Aide/Politiquedeconf
 import Politiquederemboursement from '../screens/settings/Aide/Politiquederemboursement'
 import ReglesdeCommunication from '../screens/settings/Aide/ReglesdeCommunication'
 import BottomTabs2 from './BottomTabs2'
-
-
+import Poids from '../screens/plus/poids'
+import Plus from '../screens/plus/plus'
 const { Navigator, Screen } = createStackNavigator();
 
 const AppNavigator = () => {
@@ -54,6 +54,7 @@ const AppNavigator = () => {
             <Screen name={'Politique de remboursement'} component={Politiquederemboursement} />
             <Screen name={"Conditions d'abonnement" } component={Conditionsdabonnement} />
             <Screen name={'Régles de Communication'} component={ReglesdeCommunication} />
+            <Screen name={'Poids'} component={Poids} />
         </Navigator>
     </NavigationContainer>
   )

@@ -1,15 +1,38 @@
-import React, { useState, useContext } from 'react';
-import { StyleSheet, Image } from 'react-native';
-import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components';
+import React, { useState, useContext } from 'react'
+import { View, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
+import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { AuthProvider, AuthContext } from '../context/AuthContext';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faEyeSlash, faEye, faEyeDropper } from '@fortawesome/free-solid-svg-icons'
+import { AuthProvider, AuthContext } from '../context/AuthContext'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const LoginScreen = ({navigation}) => {
     const {login} = useContext(AuthContext);
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
+    const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+    const toggleSecureEntry = () => {
+      setSecureTextEntry(!secureTextEntry);
+      console.log(secureTextEntry)
+    };
+  
+    const renderIcon = () => (
+        <FontAwesomeIcon onPress={() => toggleSecureEntry()} icon={secureTextEntry ? faEyeSlash : faEye} />
+    );
+  
+    const renderCaption = () => {
+      return (
+        <View style={styles.captionContainer}>
+          <Text style={styles.captionText}>Doit contenir au moins 8 symboles</Text>
+        </View>
+      )
+    }
+   
     return(
-      <AuthProvider>
+    <AuthProvider>
+      <KeyboardAwareScrollView>
       <Layout style={styles.container}>
         <Layout style={styles.layout} level='1'>
         <Image
@@ -29,8 +52,10 @@ const LoginScreen = ({navigation}) => {
             value={password}
             size='large'
             placeholder='Mot de passe'
+            caption={renderCaption}
+            accessoryRight={renderIcon}
             onChangeText={text => setPassword(text)}
-            secureTextEntry
+            secureTextEntry={secureTextEntry}
           />
           <Button style={styles.button} onPress={() => {login(email, password)}} size='giant'>S'IDENTIFIER</Button>
           <Text style={styles.text}>ou, connectez-vous avec</Text>
@@ -50,7 +75,8 @@ const LoginScreen = ({navigation}) => {
           <Text style={styles.text} category='s1'> Nouveau sur l'application? <Text style={styles.link}>S'inscrire</Text> </Text>
         </Layout>
     </Layout>
-    </AuthProvider>
+    </KeyboardAwareScrollView>
+  </AuthProvider>
     )
 }
 
@@ -59,7 +85,8 @@ export default LoginScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
+    paddingTop: 60,
   },
   socialmedia: {
     flexDirection: 'row',
@@ -68,6 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   input: {
     marginHorizontal: 16,
@@ -103,4 +131,13 @@ const styles = StyleSheet.create({
   logo: {
     marginVertical: 50,
   },
+  captionContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  captionText: {
+    fontSize: 14,
+    color: "#8F9BB3",
+  }
 });

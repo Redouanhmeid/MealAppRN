@@ -9,18 +9,18 @@ const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
 const CloseIcon = () => (
-  <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
+    <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
 );
-const BreakfastTitleModal = () => (
-  <Text category='h5' style={styles.titlemodal}>Petit-déjeuner</Text>
+const EnCasTitleModal = () => (
+  <Text category='h5' style={styles.titlemodal}>En-Cas</Text>
 );
 
-const ModalBreakfast = ({toModalBreakfast}) => {
-  const Repas = toModalBreakfast.Repas1
+const ModalEnCas = ({toModalEnCas}) => {
+  const Repas = toModalEnCas.Repas2
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
-      onPress={() => toModalBreakfast.setBreakFastVisible(false)}
+      onPress={() => toModalEnCas.setEnCasVisible(false)}
     />
   );
 
@@ -42,7 +42,7 @@ const ModalBreakfast = ({toModalBreakfast}) => {
   return (
     <SafeAreaView style={styles.ModalContainer}>
       <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
-      <TopNavigation style={styles.ModalTopContainer} title={BreakfastTitleModal} accessoryLeft={renderBackAction}/>
+      <TopNavigation style={styles.ModalTopContainer} title={EnCasTitleModal} accessoryLeft={renderBackAction}/>
       <ScrollView style={styles.container}>
         <ImageBackground
           style={styles.image}
@@ -69,7 +69,7 @@ const ModalBreakfast = ({toModalBreakfast}) => {
   )
 }
 
-export default ModalBreakfast
+export default ModalEnCas
 
 const styles = StyleSheet.create({
   spinnercontainer: {

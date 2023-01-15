@@ -8,6 +8,8 @@ import Foods from '../assets/food2.json'
 import axios from 'axios'
 import { BASE_URL } from '../client-config'
 import ModalBreakfast from './ModalBreakfast'
+import ModalLunch from './ModalLunch'
+import ModalDinner from './ModalDinner'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
@@ -18,7 +20,9 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
   const NRepas = leadId.nrepas
   const [ProgramId, setProgramId] = useState()
   const [isLoaded, setIsLoaded] = useState(true)
-  const [visible, setVisible] = useState(false)
+  const [BreakFastvisible, setBreakFastVisible] = useState(false)
+  const [LunchVisible, setLunchVisible] = useState(false)
+  const [DinnerVisible, setDinnerVisible] = useState(false)
   const [Repas1, setRepas1] = useState()
   const [Repas2, setRepas2] = useState()
   const [Repas3, setRepas3] = useState()
@@ -182,21 +186,29 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
         style={styles.container}
         title={ItemInfos1}
         accessoryLeft={ItemImage1}
-        onPress={() => setVisible(true)}
+        onPress={() => setBreakFastVisible(true)}
       />
       <ListItem
         style={styles.container}
         title={ItemInfos2}
         accessoryLeft={ItemImage2}
+        onPress={() => setLunchVisible(true)}
       />
       <ListItem
         style={styles.container}
         title={ItemInfos3}
         accessoryLeft={ItemImage3}
+        onPress={() => setDinnerVisible(true)}
       />
 
-      <Modal visible={visible}>
-        <ModalBreakfast toModalBreakfast={{setVisible, Repas1}}/>
+      <Modal visible={BreakFastvisible}>
+        <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1}}/>
+      </Modal>
+      <Modal visible={LunchVisible}>
+        <ModalLunch toModalLunch={{setLunchVisible, Repas2}}/>
+      </Modal>
+      <Modal visible={DinnerVisible}>
+        <ModalDinner toModalDinner={{setDinnerVisible, Repas3}}/>
       </Modal>
     </Layout>
   )

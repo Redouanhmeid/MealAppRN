@@ -1,39 +1,30 @@
 import { StyleSheet, View, ScrollView, Image } from 'react-native'
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Text, Layout, Modal, ListItem, Button, Divider } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import ModalBreakfast from '../screens/ModalBreakfast'
-import { AuthContext } from '../context/AuthContext'
 import axios from 'axios'
 import { BASE_URL } from '../client-config'
+import ModalEnCas from './ModalEnCas'
+import ModalLunch from './ModalLunch'
+import ModalDinner from './ModalDinner'
+
 
 const RightIcon = (props) => (
   <FontAwesomeIcon icon={ faPlusCircle } style={styles.icon} size={ 28 }/>
 );
 const BreakfastImage = (props) => (
-  <Image
-    style={styles.img}
-    source={require('../assets/breakfast.png')}
-  />
+  <Image style={styles.img} source={require('../assets/breakfast.png')} />
 );
 const EnCasImage = (props) => (
-  <Image
-    style={styles.img}
-    source={require('../assets/encas.png')}
-  />
+  <Image style={styles.img} source={require('../assets/encas.png')} />
 );
 const LunchImage = (props) => (
-  <Image
-    style={styles.img}
-    source={require('../assets/lunch.png')}
-  />
+  <Image style={styles.img} source={require('../assets/lunch.png')} />
 );
 const DinnerImage = (props) => (
-  <Image
-    style={styles.img}
-    source={require('../assets/dinner.png')}
-  />
+  <Image style={styles.img} source={require('../assets/dinner.png')} />
 );
 const BreakfastTitle = () => (
   <Text category='h6'>Petit-déjeuner</Text>
@@ -60,46 +51,27 @@ const DinnerTitleModal = () => (
   <Text category='h5' style={styles.titlemodal}>Dîner</Text>
 );
 
-const Nutrution = () => {
-  const {userInfo, leadId, programId} = useContext(AuthContext)
-  const LeadId = leadId.Id
-  const NRepas = leadId.nrepas
+const Nutrution = ({navigation, route}) => {
+
   const [visible, setVisible] = useState(false)
   const [Repas1, setRepas1] = useState()
   const [Repas2, setRepas2] = useState()
   const [Repas3, setRepas3] = useState()
   const [Repas4, setRepas4] = useState()
   const [Repas5, setRepas5] = useState()
-  let tempDate = new Date()
-  let ftodayDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
+  const [BreakFastvisible, setBreakFastVisible] = useState(false)
+  const [EnCasvisible, setEnCasVisible] = useState(false)
+  const [LunchVisible, setLunchVisible] = useState(false)
+  const [DinnerVisible, setDinnerVisible] = useState(false)
 
   useEffect(() => {
-    requestRepas(programId, ftodayDate)
-  }, [programId])
+    setRepas1(route.params.R1)
+    setRepas2(route.params.R2)
+    setRepas3(route.params.R3)
+    setRepas4(route.params.R4)
+    setRepas5(route.params.R5)
+  }, [route.params.R1])
 
-  const requestRepas = async (Item, day) => {
-    try {
-      var params = {
-        url: `${BASE_URL}/wp-json/repas/idrepas/idprog=${Item}/repasday=${day}`,
-        method: 'get',
-        rejectUnauthorized: false,//add when working with https sites
-        requestCert: false,//add when working with https sites
-        agent: false,//add when working with https sites
-      }
-      const res = await axios(params)
-      setRepas1(res.data[0].Repas[1])
-      setRepas2(res.data[0].Repas[3])
-      setRepas3(res.data[0].Repas[5])
-      if(res.data[0].Repas[7] !== undefined || null){
-        setRepas4(res.data[0].Repas[7])
-      }
-      if(res.data[0].Repas[9] !== undefined || null){
-        setRepas5(res.data[0].Repas[9])
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
   return (
       <Layout style={styles.container} level='2'>
         <Text category='h1'>Agenda</Text>
@@ -109,29 +81,41 @@ const Nutrution = () => {
             title={BreakfastTitle}
             accessoryLeft={BreakfastImage}
             accessoryRight={RightIcon}
-            onPress={() => setVisible(true)}
+            onPress={() => setBreakFastVisible(true)}
           />
           <Divider />
           <ListItem style={styles.listcontainer}
             title={EnCasTitle}
             accessoryLeft={EnCasImage}
             accessoryRight={RightIcon}
+            onPress={() => setEnCasVisible(true)}
           />
           <Divider />
           <ListItem style={styles.listcontainer}
             title={LunchTitle}
             accessoryLeft={LunchImage}
             accessoryRight={RightIcon}
+            onPress={() => setLunchVisible(true)}
           />
           <Divider />
           <ListItem style={styles.listcontainer}
             accessoryLeft={DinnerImage}
             title={DinnerTitle}
             accessoryRight={RightIcon}
+            onPress={() => setDinnerVisible(true)}
           />
 
-        <Modal visible={visible}>
-          <ModalBreakfast toModalBreakfast={{setVisible, Repas1}}/>
+        <Modal visible={BreakFastvisible}>
+          <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1}}/>
+        </Modal>
+        <Modal visible={LunchVisible}>
+          <ModalLunch toModalLunch={{setLunchVisible, Repas2}}/>
+        </Modal>
+        <Modal visible={DinnerVisible}>
+          <ModalDinner toModalDinner={{setDinnerVisible, Repas3}}/>
+        </Modal>
+        <Modal visible={EnCasvisible}>
+          <ModalEnCas toModalEnCas={{setEnCasVisible, Repas2}}/>
         </Modal>
         </ScrollView>
       </Layout>
