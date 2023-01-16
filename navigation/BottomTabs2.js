@@ -63,7 +63,7 @@ const BottomTabs2 = ({navigation}) => {
       }
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       requestRepas(programId, ftodayDate)
     }, [programId])
     
@@ -77,8 +77,7 @@ const BottomTabs2 = ({navigation}) => {
   return (
     <BottomSheetModalProvider>
       <Tab.Navigator
-        initialRouteName="Agenda"
-        mode="Modal"
+        initialRouteName="Plan Meal"
         screenOptions={{
           tabBarShowLabel: true,
           headerShown: false,
@@ -125,7 +124,7 @@ const BottomTabs2 = ({navigation}) => {
         ref={bottomSheetModalRef}
         index={0}
         snapPoints={snapPoints}
-        backgroundStyle={{borderRadius: 25, backgroundColor: '#fff',}}
+        backgroundStyle={{borderRadius: 25, backgroundColor: '#fff'}}
         enablePanDownToClose={true}
         onDismiss={() => setIsOpen(false)}
       >

@@ -1,5 +1,5 @@
 import { View, StyleSheet, Dimensions } from 'react-native'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
 import { AuthContext } from '../context/AuthContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Card, Text, Avatar, Modal, Button, ListItem, Layout, Spinner } from '@ui-kitten/components'
@@ -13,83 +13,45 @@ import ModalDinner from './ModalDinner'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
-
-const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
-  const {userInfo, leadId} = useContext(AuthContext)
+const PlanMealChild = ({getD}) => {
+  const {leadId, programId} = useContext(AuthContext)
   const LeadId = leadId.Id
   const NRepas = leadId.nrepas
-  const [ProgramId, setProgramId] = useState()
   const [isLoaded, setIsLoaded] = useState(true)
   const [BreakFastvisible, setBreakFastVisible] = useState(false)
   const [LunchVisible, setLunchVisible] = useState(false)
   const [DinnerVisible, setDinnerVisible] = useState(false)
-  const [Repas1, setRepas1] = useState()
-  const [Repas2, setRepas2] = useState()
-  const [Repas3, setRepas3] = useState()
-  const [Repas4, setRepas4] = useState()
-  const [Repas5, setRepas5] = useState()
+  const [Repas1, setRepas1] = useState(0)
+  const [Repas2, setRepas2] = useState(0)
+  const [Repas3, setRepas3] = useState(0)
+  const [Repas4, setRepas4] = useState(0)
+  const [Repas5, setRepas5] = useState(0)
+  const [BreakFastTime, setBreakFastTime] = useState()
+  const [LunchTime, setLunchTime] = useState()
+  const [DinnerTime, setDinnerTime] = useState()
+  const [EnCas1Time, setEnCas1Time] = useState()
+  const [EnCas2Time, setEnCas2Time] = useState()
 
   const [day, setDay] = useState()
   let tempDate = new Date()
   let ftodayDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
-  
-  useEffect(() => {
-    requestProgramId()
-  }, [ProgramId])
-
+ 
+  useLayoutEffect(() => {
+    requestTimes()
+  }, [LeadId])
   useEffect(() => {
     if (getD === "Aujourd'hui") {setDay(ftodayDate)}
     else { setDay(getD) }
   }, [getD])
-
   useEffect(() => {
     setIsLoaded(true)
-    if(ProgramId !== undefined || null){
-      getrangedate(ProgramId)
-      requestRepas(ProgramId, day)
-    }
-  }, [day, ProgramId])
-
-  const requestProgramId = async () => {
-    try {
-      var params = {
-        url: `${BASE_URL}/wp-json/repas/idprogrambylead/${LeadId}`,
-        method: 'get',
-        rejectUnauthorized: false,//add when working with https sites
-        requestCert: false,//add when working with https sites
-        agent: false,//add when working with https sites
+    if(day !== undefined || null){
+      if(programId !== undefined || null){
+        requestRepas(programId, day)
       }
-      const res = await axios(params)
-      setProgramId(res.data[0].Id_Program)
-    } catch (error) {
-      console.error(error);
     }
-  }
-  const getrangedate = async (Item) => {
-    try {
-      var paramsmin = {
-        url: `${BASE_URL}/wp-json/repas/mindate/${Item}`,
-        method: 'get',
-        rejectUnauthorized: false,//add when working with https sites
-        requestCert: false,//add when working with https sites
-        agent: false,//add when working with https sites
-      } 
-      var paramsmax = {
-        url: `${BASE_URL}/wp-json/repas/maxdate/${Item}`,
-        method: 'get',
-        rejectUnauthorized: false,//add when working with https sites
-        requestCert: false,//add when working with https sites
-        agent: false,//add when working with https sites
-      } 
-      const resmin = await axios(paramsmin)
-      const resmax = await axios(paramsmax)
-      getMinDate(resmin.data[0].Date)
-      getMaxDate(resmax.data[0].Date)
-    } catch (error) {
-      console.error(error);
-    }
-    
-  }
+  }, [day, programId])
+
   const requestRepas = async (Item, day) => {
     try {
       var params = {
@@ -113,6 +75,26 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
       console.error(error);
     }
     setIsLoaded(false)
+  }
+  const requestTimes = async () => {
+    try {
+      var params = {
+        url: `${BASE_URL}/wp-json/repas/repastimes/${LeadId}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      }
+      const res = await axios(params)
+      console.log(res.data[0])
+      setBreakFastTime(res.data[0].BreakFastTime)
+      setLunchTime(res.data[0].LunchTime)
+      setDinnerTime(res.data[0].DinnerTime)
+      setEnCas1Time(res.data[0].EnCas1Time)
+      setEnCas2Time(res.data[0].EnCas2Time)
+    } catch (error) {
+      console.error(error);
+    }
   }
   
   const ItemImage1 = (props) => (
@@ -140,7 +122,7 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
     <View style={styles.card} {...props}>
       <View style={styles.CardHeader}>
         <Text style={styles.breakfast} category='p2'>PETIT-DÉJEUNER</Text>
-        <Text>&#128337; 10:00</Text>
+        <Text>&#128337; {BreakFastTime}</Text>
         <Text>&#x1F525; {Foods.find(food => food.id == Repas1).calories}</Text>
       </View>
       <Text category='h5'>{Foods.find(food => food.id == Repas1).foodName}</Text>
@@ -150,7 +132,7 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
     <View style={styles.card} {...props}>
       <View style={styles.CardHeader}>
         <Text style={styles.lunch} category='p2'>DÉJEUNER</Text>
-        <Text>&#128337; 14:00</Text>
+        <Text>&#128337; {LunchTime}</Text>
         <Text>&#x1F525; {Foods.find(food => food.id == Repas2).calories}</Text>
       </View>
       <Text category='h5'>{Foods.find(food => food.id == Repas2).foodName}</Text>
@@ -160,17 +142,17 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
     <View style={styles.card} {...props}>
       <View style={styles.CardHeader}>
         <Text style={styles.dinner} category='p2'>DÎNER</Text>
-        <Text>&#128337; 18:00</Text>
+        <Text>&#128337; {DinnerTime}</Text>
         <Text>&#x1F525; {Foods.find(food => food.id == Repas3).calories}</Text>
       </View>
       <Text category='h5'>{Foods.find(food => food.id == Repas3).foodName}</Text>
     </View>
   )
-  ItemInfos1.propTypes= {Repas1: propTypes.string.isRequired}
+  ItemInfos1.propTypes= {Repas1: propTypes.string}
   ItemInfos1.defaultProps = {Repas1: Repas1}
-  ItemInfos2.propTypes= {Repas2: propTypes.string.isRequired}
+  ItemInfos2.propTypes= {Repas2: propTypes.string}
   ItemInfos2.defaultProps = {Repas2: Repas2}
-  ItemInfos3.propTypes= {Repas3: propTypes.string.isRequired}
+  ItemInfos3.propTypes= {Repas3: propTypes.string}
   ItemInfos3.defaultProps = {Repas3: Repas3}
   
   if(isLoaded) {
@@ -183,33 +165,33 @@ const PlanMealChild = ({getD, getMinDate, getMaxDate}) => {
   return (
     <Layout style={styles.view} level='2'>
       <ListItem
-        style={styles.container}
-        title={ItemInfos1}
-        accessoryLeft={ItemImage1}
-        onPress={() => setBreakFastVisible(true)}
+          style={styles.container}
+          title={ItemInfos1}
+          accessoryLeft={ItemImage1}
+          onPress={() => setBreakFastVisible(true)}
       />
       <ListItem
-        style={styles.container}
-        title={ItemInfos2}
-        accessoryLeft={ItemImage2}
-        onPress={() => setLunchVisible(true)}
-      />
-      <ListItem
-        style={styles.container}
-        title={ItemInfos3}
-        accessoryLeft={ItemImage3}
-        onPress={() => setDinnerVisible(true)}
-      />
+          style={styles.container}
+          title={ItemInfos2}
+          accessoryLeft={ItemImage2}
+          onPress={() => setLunchVisible(true)}
+        />
+        <ListItem
+          style={styles.container}
+          title={ItemInfos3}
+          accessoryLeft={ItemImage3}
+          onPress={() => setDinnerVisible(true)}
+        />
 
-      <Modal visible={BreakFastvisible}>
-        <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1}}/>
-      </Modal>
-      <Modal visible={LunchVisible}>
-        <ModalLunch toModalLunch={{setLunchVisible, Repas2}}/>
-      </Modal>
-      <Modal visible={DinnerVisible}>
-        <ModalDinner toModalDinner={{setDinnerVisible, Repas3}}/>
-      </Modal>
+        <Modal visible={BreakFastvisible}>
+          <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1}}/>
+        </Modal>
+        <Modal visible={LunchVisible}>
+          <ModalLunch toModalLunch={{setLunchVisible, Repas2}}/>
+        </Modal>
+        <Modal visible={DinnerVisible}>
+          <ModalDinner toModalDinner={{setDinnerVisible, Repas3}}/>
+        </Modal>
     </Layout>
   )
 }

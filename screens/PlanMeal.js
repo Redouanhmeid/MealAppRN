@@ -1,10 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Button, Calendar, Layout, Text } from '@ui-kitten/components';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAngleLeft, faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
+import { AuthContext } from '../context/AuthContext'
+import axios from 'axios'
+import { BASE_URL } from '../client-config'
 import DatePicker from './DatePicker'
-import PlanMealChild from './PlanMealChild';
+import PlanMealChild from './PlanMealChild'
 
 const LeftIcon = () => (
   <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>
@@ -18,6 +21,7 @@ const CalendarIcon = (props) => (
 const windowWidth = Dimensions.get('window').width;
 
 const PlanMeal = () => {
+  const {programId} = useContext(AuthContext)
   const [ selectedDate, setSelectedDate ] = useState('Aujourd\'hui')
   const [MinDate, setMinDate] = useState()
   const [MaxDate, setMaxDate] = useState()
@@ -34,7 +38,7 @@ const PlanMeal = () => {
   const ystDate = new Date()
   ystDate.setDate(new Date().getDate() - 1)
   let fyesterdayDate = ystDate.getDate() + '/' + (ystDate.getMonth() + 1) + '/' + ystDate.getFullYear()
-  
+
   
   const [ selectedDateString, setSelectedDateString ] = useState()
   useEffect(()=>{
@@ -42,20 +46,46 @@ const PlanMeal = () => {
     else if (selectedDate === fyesterdayDate){ setSelectedDateString('Hier') }
     else if (selectedDate === ftomorrowDate){ setSelectedDateString('Demain') }
     else { setSelectedDateString(selectedDate) }
+    getrangedate(programId)
   }, [selectedDate, MinDate, MaxDate])
+
+  const getrangedate = async (Item) => {
+    try {
+      var paramsmin = {
+        url: `${BASE_URL}/wp-json/repas/mindate/${Item}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      } 
+      var paramsmax = {
+        url: `${BASE_URL}/wp-json/repas/maxdate/${Item}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      } 
+      const resmin = await axios(paramsmin)
+      const resmax = await axios(paramsmax)
+      setMinDate(resmin.data[0].Date)
+      setMaxDate(resmax.data[0].Date)
+    } catch (error) {
+      console.error(error);
+    }
+  }
  
   return (
     <>
       <Layout style={styles.container} level='2'>
         <Text category='h1'>  Plan de repas</Text>
         <View style={styles.viewclass}>
-          <Button onPress={() => childCompRef.current.prevDay()} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
+          <Button onPress={() => childCompRef.current.prevDay()} disabled={selectedDate === MinDate ? true : false} style={styles.pullleft} accessoryLeft={LeftIcon} appearance='outline' size='large' />
           <Button onPress={() => childCompRef.current.showDatePicker()} appearance='ghost' style={styles.today} size='large'>
             <CalendarIcon /> { selectedDateString }
           </Button>
           <Button onPress={() => childCompRef.current.nextDay()} style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
         </View>
-        <PlanMealChild getD={selectedDate} getMinDate={MinDate => setMinDate(MinDate)} getMaxDate={MaxDate => setMaxDate(MaxDate)}/>
+        <PlanMealChild getD={selectedDate}/>
       </Layout>
       <DatePicker ref={childCompRef} getD={selectedDate => setSelectedDate(selectedDate)} MinDate={MinDate} MaxDate={MaxDate}/>
     </>

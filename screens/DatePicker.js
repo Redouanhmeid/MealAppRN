@@ -68,6 +68,11 @@ const DatePicker = (props, ref) => {
           minimumDate={minimumDate}
           maximumDate={maximumDate}
           onChange={onChange}
+          textColor='red'
+          themeVariant="dark"
+          positiveButton={{label: 'OK', textColor: 'green'}}
+          negativeButton={{label: 'Annuler', textColor: 'red'}}
+          minuteInterval={10}
         />
       )}
     </View>

@@ -1,10 +1,13 @@
 import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext, useLayoutEffect } from 'react'
+import { AuthContext } from '../../context/AuthContext'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { Layout, Toggle, Button, Modal, Card, TopNavigation, TopNavigationAction, Text, Divider } from '@ui-kitten/components'
+import { Layout, Toggle, Button, Modal, Card, TopNavigation, TopNavigationAction, Text, Divider, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { faArrowLeft, faCircleInfo, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { BASE_URL } from '../../client-config'
+import axios from 'axios'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
@@ -19,17 +22,53 @@ const RightIcon = () => (
 );
  
 const Repas = ({navigation}) => {
+  const {leadId} = useContext(AuthContext)
+  const LeadId = leadId.Id
+  const NRepas = leadId.nrepas
   const [modalvisible, setModalVisible] = useState(false)
   const [bchecked, setBChecked] = useState(false)
   const [lchecked, setLChecked] = useState(false)
   const [dchecked, setDChecked] = useState(false)
+  const [c1checked, setC1Checked] = useState(false)
+  const [c2checked, setC2Checked] = useState(false)
   const [wchecked, setWChecked] = useState(false)
 
   const onBCheckedChange = (isChecked) => {setBChecked(isChecked)}
   const onLCheckedChange = (isChecked) => {setLChecked(isChecked)}
   const onDCheckedChange = (isChecked) => {setDChecked(isChecked)}
+  const onC1CheckedChange = (isChecked) => {setC1Checked(isChecked)}
+  const onC2CheckedChange = (isChecked) => {setC2Checked(isChecked)}
   const onWCheckedChange = (isChecked) => {setWChecked(isChecked)}
-
+  const [isLoaded, setIsLoaded] = useState(true)
+  const [BreakFastTime, setBreakFastTime] = useState()
+  const [LunchTime, setLunchTime] = useState()
+  const [DinnerTime, setDinnerTime] = useState()
+  const [EnCas1Time, setEnCas1Time] = useState()
+  const [EnCas2Time, setEnCas2Time] = useState()
+  console.log(NRepas)
+  const requestTimes = async () => {
+    try {
+      var params = {
+        url: `${BASE_URL}/wp-json/repas/repastimes/${LeadId}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      }
+      const res = await axios(params)
+      setBreakFastTime(res.data[0].BreakFastTime)
+      setLunchTime(res.data[0].LunchTime)
+      setDinnerTime(res.data[0].DinnerTime)
+      setEnCas1Time(res.data[0].EnCas1Time)
+      setEnCas2Time(res.data[0].EnCas2Time)
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoaded(false)
+  }
+  useLayoutEffect(() => {
+    requestTimes()
+  }, [LeadId])
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
@@ -57,6 +96,13 @@ const Repas = ({navigation}) => {
     showMode('time');
   };
 
+  if(isLoaded) {
+    return (
+      <Layout style={styles.spinnercontainer} level='2'>
+        <Spinner size='giant'/>
+      </Layout>
+    )
+  }
   return (
     <SafeAreaView style={styles.container}>
       <TopNavigation title='Nutrution' accessoryLeft={renderBackAction} />
@@ -72,9 +118,21 @@ const Repas = ({navigation}) => {
           </View>
           <TouchableOpacity style={styles.toggles} onPress={showTimepicker}>
             <Text style={styles.togglelabel}>Heure</Text>
-            <Text style={styles.hourelabel}>10:00 </Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
+            <Text style={styles.hourelabel}>{BreakFastTime} </Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
           </TouchableOpacity>
         </Layout>
+        
+        {NRepas === '4-fois' || NRepas === '5-fois' &&
+        <Layout style={styles.block} level='1'>
+          <View style={styles.toggles}>
+            <Text style={styles.togglelabel}>1er en-cas</Text>
+            <Toggle checked={c1checked} onChange={onC1CheckedChange} style={styles.toggleicon}/>
+          </View>
+          <TouchableOpacity style={styles.toggles} onPress={showTimepicker} appearance='ghost'>
+            <Text style={styles.togglelabel}>Heure</Text>
+            <Text style={styles.hourelabel}>{EnCas1Time}</Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
+          </TouchableOpacity>
+        </Layout>}
 
         <Layout style={styles.block} level='1'>
           <View style={styles.toggles}>
@@ -83,20 +141,33 @@ const Repas = ({navigation}) => {
           </View>
           <TouchableOpacity style={styles.toggles} onPress={showTimepicker}>
             <Text style={styles.togglelabel}>Heure</Text>
-            <Text style={styles.hourelabel}>14:30 </Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
+            <Text style={styles.hourelabel}>{LunchTime} </Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
           </TouchableOpacity>
         </Layout>
 
+        {NRepas === '5-fois' &&
         <Layout style={styles.block} level='1'>
           <View style={styles.toggles}>
-            <Text style={styles.togglelabel}>Déjeuner</Text>
+            <Text style={styles.togglelabel}>2ème en-cas</Text>
+            <Toggle checked={c2checked} onChange={onC2CheckedChange} style={styles.toggleicon}/>
+          </View>
+          <TouchableOpacity style={styles.toggles} onPress={showTimepicker} appearance='ghost'>
+            <Text style={styles.togglelabel}>Heure</Text>
+            <Text style={styles.hourelabel}>{EnCas2Time}</Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
+          </TouchableOpacity>
+        </Layout>}
+
+        {NRepas !== '2-fois' &&
+        <Layout style={styles.block} level='1'>
+          <View style={styles.toggles}>
+            <Text style={styles.togglelabel}>Dîner</Text>
             <Toggle checked={dchecked} onChange={onDCheckedChange} style={styles.toggleicon}/>
           </View>
           <TouchableOpacity style={styles.toggles} onPress={showTimepicker} appearance='ghost'>
             <Text style={styles.togglelabel}>Heure</Text>
-            <Text style={styles.hourelabel}>18:00 </Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
+            <Text style={styles.hourelabel}>{DinnerTime}</Text><FontAwesomeIcon icon={faAngleRight} color='#C628A4'/>
           </TouchableOpacity>
-        </Layout>
+        </Layout>}
 
         <Layout style={styles.block} level='1'>
           <View style={styles.toggles}>
@@ -123,6 +194,12 @@ const Repas = ({navigation}) => {
             testID="dateTimePicker"
             value={date}
             mode='time'
+            textColor="red"
+            themeVariant="dark"
+            positiveButton={{label: 'OK', textColor: 'green'}}
+            negativeButton={{label: 'Annuler', textColor: 'red'}}
+            minuteInterval={10}
+            style={styles.windowsPicker}
             onChange={onChange}
           />
         )}
@@ -134,6 +211,13 @@ const Repas = ({navigation}) => {
 export default Repas
 
 const styles = StyleSheet.create({
+  spinnercontainer: {
+      flex: 1,
+      justifyContent:'center',
+      alignItems: 'center',
+      width: windowWidth,
+      height: windowHeight,
+    },
     container: {
       flex: 1,
       flexDirection: 'column',
@@ -190,5 +274,11 @@ const styles = StyleSheet.create({
       marginTop: 20,
       borderBottomWidth: 1,
       borderColor: '#cecece',
-    }
+    },
+    windowsPicker: {
+      flex: 1,
+      paddingTop: 10,
+      width: 350,
+      height: 600,
+    },
   });
