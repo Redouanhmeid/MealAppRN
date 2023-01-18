@@ -1,13 +1,14 @@
 import React, { useState, useContext } from 'react'
-import { View, StyleSheet, Image, Dimensions } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { Button, Layout, Text, Modal } from '@ui-kitten/components'
-import { AuthContext } from '../../context/AuthContext';
 import Eau from './eau';
 import Poids from './poids';
 import ModalBreakfast from '../ModalBreakfast';
 import ModalEnCas from '../ModalEnCas';
 import ModalLunch from '../ModalLunch';
 import ModalDinner from '../ModalDinner';
+import { RepasContext } from '../AppStack';
+import { NativeViewGestureHandler } from 'react-native-gesture-handler';
 
   const WaterImage = () => (
     <Image style={styles.img} source={require('../../assets/water.png')} />
@@ -28,26 +29,21 @@ import ModalDinner from '../ModalDinner';
     <Image style={styles.img} source={require('../../assets/dinner.png')} />
   );
 
-const Plus = ({ navigation, toPlus }) => {
-    console.log(toPlus.Repas1)
-    const Repas1 = toPlus.Repas1
-    const Repas2 = toPlus.Repas2
-    const Repas3 = toPlus.Repas3
-    const Repas4 = toPlus.Repas4
-    const Repas5 = toPlus.Repas5
-    const [Eauvisible, setEauVisible] = useState(false)
-    const [BreakFastvisible, setBreakFastVisible] = useState(false)
-    const [EnCasvisible, setEnCasVisible] = useState(false)
-    const [LunchVisible, setLunchVisible] = useState(false)
-    const [DinnerVisible, setDinnerVisible] = useState(false)
-    
 
-    function handleEauModal() {setEauVisible(true)}
+const Plus = ({ navigation }) => {
+  const {Repas1, Repas2, Repas3, Repas4, Repas5} = useContext(RepasContext)
+  const [Eauvisible, setEauVisible] = useState(false)
+  const [BreakFastvisible, setBreakFastVisible] = useState(false)
+  const [EnCasvisible, setEnCasVisible] = useState(false)
+  const [LunchVisible, setLunchVisible] = useState(false)
+  const [DinnerVisible, setDinnerVisible] = useState(false)
+
   return (
+    <NativeViewGestureHandler disallowInterruption={true}>
     <Layout style={styles.container} level='1'>
       <View style={styles.view}>
         <View style={styles.layout}>
-          <Button style={styles.food} accessoryLeft={WaterImage} onPress={handleEauModal}/>
+          <Button style={styles.food} accessoryLeft={WaterImage} onPress={() => setEauVisible(true)}/>
           <Text>Eau</Text>
         </View>
         <View style={styles.layout}>
@@ -93,6 +89,7 @@ const Plus = ({ navigation, toPlus }) => {
         <ModalDinner toModalDinner={{setDinnerVisible, Repas3}}/>
       </Modal>
     </Layout>
+    </NativeViewGestureHandler>
   )
 }
 

@@ -3,7 +3,7 @@ import { View, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
 import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faEyeSlash, faEye, faEyeDropper } from '@fortawesome/free-solid-svg-icons'
+import { faLock } from '@fortawesome/free-solid-svg-icons'
 import { AuthProvider, AuthContext } from '../context/AuthContext'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -11,15 +11,9 @@ const LoginScreen = ({navigation}) => {
     const {login} = useContext(AuthContext);
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
-    const [secureTextEntry, setSecureTextEntry] = useState(true);
-
-    const toggleSecureEntry = () => {
-      setSecureTextEntry(!secureTextEntry);
-      console.log(secureTextEntry)
-    };
   
     const renderIcon = () => (
-        <FontAwesomeIcon onPress={() => toggleSecureEntry()} icon={secureTextEntry ? faEyeSlash : faEye} />
+      <FontAwesomeIcon icon={faLock} size={22} color={'#8f9bb3'} />
     );
   
     const renderCaption = () => {
@@ -55,7 +49,7 @@ const LoginScreen = ({navigation}) => {
             caption={renderCaption}
             accessoryRight={renderIcon}
             onChangeText={text => setPassword(text)}
-            secureTextEntry={secureTextEntry}
+            secureTextEntry={true}
           />
           <Button style={styles.button} onPress={() => {login(email, password)}} size='giant'>S'IDENTIFIER</Button>
           <Text style={styles.text}>ou, connectez-vous avec</Text>
@@ -95,7 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    
   },
   input: {
     marginHorizontal: 16,

@@ -1,5 +1,5 @@
 import { StyleSheet, View, ScrollView, Image } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Text, Layout, Modal, ListItem, Button, Divider } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons'
@@ -9,6 +9,7 @@ import { BASE_URL } from '../client-config'
 import ModalEnCas from './ModalEnCas'
 import ModalLunch from './ModalLunch'
 import ModalDinner from './ModalDinner'
+import { RepasContext } from './AppStack'
 
 
 const RightIcon = (props) => (
@@ -51,26 +52,13 @@ const DinnerTitleModal = () => (
   <Text category='h5' style={styles.titlemodal}>Dîner</Text>
 );
 
-const Nutrution = ({navigation, route}) => {
-
+const Nutrution = () => {
+  const {Repas1, Repas2, Repas3, Repas4, Repas5} = useContext(RepasContext)
   const [visible, setVisible] = useState(false)
-  const [Repas1, setRepas1] = useState()
-  const [Repas2, setRepas2] = useState()
-  const [Repas3, setRepas3] = useState()
-  const [Repas4, setRepas4] = useState()
-  const [Repas5, setRepas5] = useState()
   const [BreakFastvisible, setBreakFastVisible] = useState(false)
   const [EnCasvisible, setEnCasVisible] = useState(false)
   const [LunchVisible, setLunchVisible] = useState(false)
   const [DinnerVisible, setDinnerVisible] = useState(false)
-
-  useEffect(() => {
-    setRepas1(route.params.R1)
-    setRepas2(route.params.R2)
-    setRepas3(route.params.R3)
-    setRepas4(route.params.R4)
-    setRepas5(route.params.R5)
-  }, [route.params.R1])
 
   return (
       <Layout style={styles.container} level='2'>
