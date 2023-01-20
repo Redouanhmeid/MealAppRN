@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions, StatusBar } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
@@ -17,6 +17,15 @@ const BreakfastTitleModal = () => (
 
 const ModalBreakfast = ({toModalBreakfast}) => {
   const Repas = toModalBreakfast.Repas1
+  const ftodayDate = toModalBreakfast.ftodayDate
+  const programId = toModalBreakfast.programId
+  const BrFait = toModalBreakfast.BrFait
+  
+  useState(()=>{
+    console.log(ftodayDate, programId, toModalBreakfast.BrFait)
+  }, [BrFait])
+
+
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}

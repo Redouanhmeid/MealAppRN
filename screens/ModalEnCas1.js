@@ -11,16 +11,16 @@ const windowHeight = Dimensions.get('screen').height
 const CloseIcon = () => (
     <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
 );
-const EnCasTitleModal = () => (
+const EnCas1TitleModal = () => (
   <Text category='h5' style={styles.titlemodal}>En-Cas</Text>
 );
 
-const ModalEnCas = ({toModalEnCas}) => {
-  const Repas = toModalEnCas.Repas2
+const ModalEnCas1 = ({toModalEnCas1}) => {
+  const Repas = toModalEnCas1.Repas2
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
-      onPress={() => toModalEnCas.setEnCasVisible(false)}
+      onPress={() => toModalEnCas1.setEnCas1Visible(false)}
     />
   );
 
@@ -42,7 +42,7 @@ const ModalEnCas = ({toModalEnCas}) => {
   return (
     <SafeAreaView style={styles.ModalContainer}>
       <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
-      <TopNavigation style={styles.ModalTopContainer} title={EnCasTitleModal} accessoryLeft={renderBackAction}/>
+      <TopNavigation style={styles.ModalTopContainer} title={EnCas1TitleModal} accessoryLeft={renderBackAction}/>
       <ScrollView style={styles.container}>
         <ImageBackground
           style={styles.image}
@@ -69,7 +69,7 @@ const ModalEnCas = ({toModalEnCas}) => {
   )
 }
 
-export default ModalEnCas
+export default ModalEnCas1
 
 const styles = StyleSheet.create({
   spinnercontainer: {

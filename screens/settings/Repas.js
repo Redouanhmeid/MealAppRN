@@ -45,7 +45,7 @@ const Repas = ({navigation}) => {
   const [DinnerTime, setDinnerTime] = useState()
   const [EnCas1Time, setEnCas1Time] = useState()
   const [EnCas2Time, setEnCas2Time] = useState()
-  console.log(NRepas)
+  
   const requestTimes = async () => {
     try {
       var params = {
@@ -68,6 +68,7 @@ const Repas = ({navigation}) => {
   }
   useLayoutEffect(() => {
     requestTimes()
+    console.log(NRepas[0])
   }, [LeadId])
   const renderBackAction = () => (
     <TopNavigationAction
@@ -122,7 +123,7 @@ const Repas = ({navigation}) => {
           </TouchableOpacity>
         </Layout>
         
-        {NRepas === '4-fois' || NRepas === '5-fois' &&
+        {NRepas[0] > 3 &&
         <Layout style={styles.block} level='1'>
           <View style={styles.toggles}>
             <Text style={styles.togglelabel}>1er en-cas</Text>
@@ -145,7 +146,7 @@ const Repas = ({navigation}) => {
           </TouchableOpacity>
         </Layout>
 
-        {NRepas === '5-fois' &&
+        {NRepas[0] > 4 &&
         <Layout style={styles.block} level='1'>
           <View style={styles.toggles}>
             <Text style={styles.togglelabel}>2ème en-cas</Text>
@@ -157,7 +158,7 @@ const Repas = ({navigation}) => {
           </TouchableOpacity>
         </Layout>}
 
-        {NRepas !== '2-fois' &&
+        {NRepas[0] > 2 &&
         <Layout style={styles.block} level='1'>
           <View style={styles.toggles}>
             <Text style={styles.togglelabel}>Dîner</Text>
@@ -176,8 +177,7 @@ const Repas = ({navigation}) => {
           </View>
         </Layout>
 
-        <Modal visible={modalvisible} style={styles.modal}>
-            <Divider />
+        <Modal visible={modalvisible} style={styles.modal} backdropStyle={styles.backdrop}>
           <Card disabled={true}>
             <Text category='h3'>Jeûne intermittent environ 16/8*</Text>
             <Text style={styles.text}><Text style={styles.strong}>Le jeûne intermittent 16/8</Text> implique une consommation limitée d’aliments et de boissons caloriques à une fenêtre de huit heures par jour et une abstention d’aliments pour les 16 heures restantes.</Text>
@@ -191,15 +191,13 @@ const Repas = ({navigation}) => {
       <View>
         {show && (
           <DateTimePicker
-            testID="dateTimePicker"
+            testID='dateTimePicker'
             value={date}
+            display='default'
             mode='time'
-            textColor="red"
-            themeVariant="dark"
-            positiveButton={{label: 'OK', textColor: 'green'}}
-            negativeButton={{label: 'Annuler', textColor: 'red'}}
-            minuteInterval={10}
-            style={styles.windowsPicker}
+            positiveButtonLabel='OK'
+            negativeButtonLabel='Annuler'
+            minuteInterval={5}
             onChange={onChange}
           />
         )}
@@ -233,7 +231,10 @@ const styles = StyleSheet.create({
     modal: {
         flex:1,
         justifyContent: 'flex-end',
-        height: windowHeight,
+        height: windowHeight * 92 / 100,
+    },
+    backdrop: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     text: {
         marginVertical: 16,
@@ -274,11 +275,5 @@ const styles = StyleSheet.create({
       marginTop: 20,
       borderBottomWidth: 1,
       borderColor: '#cecece',
-    },
-    windowsPicker: {
-      flex: 1,
-      paddingTop: 10,
-      width: 350,
-      height: 600,
     },
   });

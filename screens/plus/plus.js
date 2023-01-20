@@ -4,7 +4,7 @@ import { Button, Layout, Text, Modal } from '@ui-kitten/components'
 import Eau from './eau';
 import Poids from './poids';
 import ModalBreakfast from '../ModalBreakfast';
-import ModalEnCas from '../ModalEnCas';
+import ModalEnCas1 from '../ModalEnCas1';
 import ModalLunch from '../ModalLunch';
 import ModalDinner from '../ModalDinner';
 import { RepasContext } from '../AppStack';
@@ -19,7 +19,7 @@ import { NativeViewGestureHandler } from 'react-native-gesture-handler';
   const BreakfastImage = () => (
     <Image style={styles.img} source={require('../../assets/breakfast.png')} />
   );
-  const EnCasImage = (props) => (
+  const EnCas1Image = (props) => (
     <Image style={styles.img} source={require('../../assets/encas.png')} />
   );
   const LunchImage = (props) => (
@@ -34,7 +34,7 @@ const Plus = ({ navigation }) => {
   const {Repas1, Repas2, Repas3, Repas4, Repas5} = useContext(RepasContext)
   const [Eauvisible, setEauVisible] = useState(false)
   const [BreakFastvisible, setBreakFastVisible] = useState(false)
-  const [EnCasvisible, setEnCasVisible] = useState(false)
+  const [EnCas1visible, setEnCas1Visible] = useState(false)
   const [LunchVisible, setLunchVisible] = useState(false)
   const [DinnerVisible, setDinnerVisible] = useState(false)
 
@@ -57,7 +57,7 @@ const Plus = ({ navigation }) => {
       </View>
       <View style={styles.view}>
         <View style={styles.layout}>
-          <Button style={styles.food} accessoryLeft={EnCasImage} onPress={() => setEnCasVisible(true)}/>
+          <Button style={styles.food} accessoryLeft={EnCas1Image} onPress={() => setEnCas1Visible(true)}/>
           <Text>En-Cas</Text>
         </View>
         <View style={styles.layout} >
@@ -79,8 +79,8 @@ const Plus = ({ navigation }) => {
       <Modal visible={BreakFastvisible}>
         <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1}}/>
       </Modal>
-      <Modal visible={EnCasvisible}>
-        <ModalEnCas toModalEnCas={{setEnCasVisible, Repas2}}/>
+      <Modal visible={EnCas1visible}>
+        <ModalEnCas1 toModalEnCas1={{setEnCas1Visible, Repas2}}/>
       </Modal>
       <Modal visible={LunchVisible}>
         <ModalLunch toModalLunch={{setLunchVisible, Repas2}}/>

@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback, useMemo } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetBackdrop} from '@gorhom/bottom-sheet'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCalendarAlt, faChartSimple, faPlusCircle, faKitchenSet, faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import Agenda from '../screens/Agenda'
@@ -28,16 +28,24 @@ const UserIcon = ({focused, size}) => (
   <FontAwesomeIcon icon={ faUserCircle } size={size} color={focused ? '#DB2DB1' : '#404040'} />
 );
 
-
-const BottomTabs2 = ({navigation, backdropProps}) => {
-  const [isLoaded, setIsLoaded] = useState(true)
-  const bottomSheetModalRef = useRef(null)
-  const [isOpen, setIsOpen ] = useState(false)
-  const snapPoints = ['36%']
-  function handlePresentModal() {
-    bottomSheetModalRef.current?.present();
-    setIsOpen(true)
-  }
+const BottomTabs2 = ({navigation}) => {
+  const bottomSheetRef  = useRef(null)
+  const snapPoints = useMemo(() => [ '36%'], []);
+  
+  const handleSnapPress = useCallback((index) => {
+    bottomSheetRef.current?.snapToIndex(index)
+  }, []);
+  // renders
+  const renderBackdrop = useCallback(
+    props => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+      />
+    ),
+    []
+  );
   return (
     <>
       <Navigator
@@ -49,12 +57,8 @@ const BottomTabs2 = ({navigation, backdropProps}) => {
           tabBarInactiveTintColor: "#404040",
         }}
       >
-        <Screen name="Agenda" component={Agenda}
-          options={{ tabBarIcon: CalendarIcon }}
-        />
-        <Screen name="Apprendre" component={Apprendre} 
-          options={{ tabBarIcon: KanbanIcon }}
-        />
+        <Screen name="Agenda" component={Agenda} options={{ tabBarIcon: CalendarIcon }} />
+        <Screen name="Apprendre" component={Apprendre} options={{ tabBarIcon: KanbanIcon }} />
         <Screen name="Plus" component={Plus}
           options={{
             tabBarLabel: '',
@@ -63,30 +67,23 @@ const BottomTabs2 = ({navigation, backdropProps}) => {
           listeners={() => ({
             tabPress: (e) => {
               e.preventDefault()
-              handlePresentModal()
+              handleSnapPress(0)
             },
           })}
         />
-        <Screen name="Plan Meal" component={PlanMeal}
-          options={{ tabBarIcon: MealIcon }}
-        />
-        <Screen name="Moi" component={Moi}
-          options={{ tabBarIcon: UserIcon }}
-        />
+        <Screen name="Plan Meal" component={PlanMeal} options={{ tabBarIcon: MealIcon }}/>
+        <Screen name="Moi" component={Moi}options={{ tabBarIcon: UserIcon }}/>
       </Navigator>
-    <BottomSheetModalProvider>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={0}
-        snapPoints={snapPoints}
-        backgroundStyle={{borderRadius: 25, backgroundColor: '#fff'}}
-        enablePanDownToClose={true}
-        onDismiss={() => setIsOpen(false)}
-        style={styles.BottomSheetShadow}
-      >
-        <Plus navigation={navigation}/>
-      </BottomSheetModal>
-    </BottomSheetModalProvider>
+    <BottomSheet
+      ref={bottomSheetRef}
+      index={-1}
+      snapPoints={snapPoints}
+      enablePanDownToClose={true}
+      backdropComponent={renderBackdrop}
+      backgroundStyle={{borderRadius: 25}}
+    >
+      <Plus navigation={navigation}/>
+    </BottomSheet>
   </>
   )
 }
@@ -94,17 +91,6 @@ const BottomTabs2 = ({navigation, backdropProps}) => {
 export default BottomTabs2
 
 const styles = StyleSheet.create({
-   BottomSheetShadow: {
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 7,
-      },
-      shadowOpacity: 0.41,
-      shadowRadius: 9.11,
-
-      elevation: 14,
-    },
     tabBar: {
       borderTopColor: '#f7f9fc',
       borderTopWidth: 1,
@@ -113,10 +99,4 @@ const styles = StyleSheet.create({
       bottom: 4,
       color: '#DB2DB1',
     },
-    unactive: {
-      color: '#f7f9fc',
-    },
-    active: {
-      color: '#DB2DB1'
-    }
 })

@@ -86,7 +86,6 @@ const PlanMealChild = ({getD}) => {
         agent: false,//add when working with https sites
       }
       const res = await axios(params)
-      console.log(res.data[0])
       setBreakFastTime(res.data[0].BreakFastTime)
       setLunchTime(res.data[0].LunchTime)
       setDinnerTime(res.data[0].DinnerTime)

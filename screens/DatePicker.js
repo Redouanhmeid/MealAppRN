@@ -64,15 +64,11 @@ const DatePicker = (props, ref) => {
           testID='dateTimePicker'
           value={date}
           mode='date'
-          display='default'
           minimumDate={minimumDate}
           maximumDate={maximumDate}
           onChange={onChange}
-          textColor='red'
-          themeVariant="dark"
-          positiveButton={{label: 'OK', textColor: 'green'}}
-          negativeButton={{label: 'Annuler', textColor: 'red'}}
-          minuteInterval={10}
+          positiveButtonLabel='OK'
+          negativeButtonLabel='Annuler'
         />
       )}
     </View>
