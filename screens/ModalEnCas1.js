@@ -1,22 +1,39 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions, StatusBar } from 'react-native'
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faClose } from '@fortawesome/free-solid-svg-icons'
+import { faClose, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Foods from '../assets/food2.json'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import axios from 'axios'
+import { BASE_URL } from '../client-config'
+import { RepasContext } from './AppStack'
+import { AuthContext } from '../context/AuthContext'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
 const CloseIcon = () => (
-    <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
+  <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
 );
 const EnCas1TitleModal = () => (
-  <Text category='h5' style={styles.titlemodal}>En-Cas</Text>
+  <Text category='h5' style={styles.titlemodal}>Premier En-Cas</Text>
+);
+const DeleteIcon = () => (
+  <FontAwesomeIcon icon={ faTrashAlt } style={styles.closeicon} size={ 18 }/>
 );
 
 const ModalEnCas1 = ({toModalEnCas1}) => {
-  const Repas = toModalEnCas1.Repas2
+  let tempDate = new Date()
+  let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
+  const {programId} = useContext(AuthContext)
+  const {getRepasFait, Repas4, E1Fait} = useContext(RepasContext)
+  const Repas = Repas4
+  const [isLoaded, setIsLoaded] = useState(true)
+
+  useEffect(()=>{
+    if(Repas4 !== undefined || null){setIsLoaded(false)}
+  })
+
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
@@ -39,6 +56,35 @@ const ModalEnCas1 = ({toModalEnCas1}) => {
     </View>
   );
 
+  const Fait = async () => {
+    const uencas1fait ={
+      encas1fait: 1,
+      Id_Program: programId,
+      Repas_Day: ftodayDate
+    };
+    axios.post(`${BASE_URL}/wp-json/repas/uencas1fait`, uencas1fait)
+      .then(getRepasFait(ftodayDate))
+      .catch(err => {console.log(err.response.data.message)})
+      .finally(() => toModalEnCas1.setEnCas1Visible(false))
+  }
+  const Delete = async () => {
+    const uencas1fait ={
+      encas1fait: 0,
+      Id_Program: programId,
+      Repas_Day: ftodayDate
+    };
+    axios.post(`${BASE_URL}/wp-json/repas/uencas1fait`, uencas1fait)
+      .then(getRepasFait(ftodayDate))
+      .catch(err => {console.log(err.response.data.message)})
+      .finally(() => toModalEnCas1.setEnCas1Visible(false))
+  }
+  if(isLoaded) {
+    return (
+      <Layout style={styles.spinnercontainer} level='1'>
+        <Spinner size='giant'/>
+      </Layout>
+    )
+  }
   return (
     <SafeAreaView style={styles.ModalContainer}>
       <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
@@ -63,7 +109,7 @@ const ModalEnCas1 = ({toModalEnCas1}) => {
         <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
-        <Button style={{width: windowWidth-50}} size={'large'}>Fait</Button>
+        <Button style={{width: windowWidth-50}} size={'large'} onPress={E1Fait ? Delete : Fait} accessoryRight={E1Fait && DeleteIcon}>Fait</Button>
       </Layout>
     </SafeAreaView>
   )

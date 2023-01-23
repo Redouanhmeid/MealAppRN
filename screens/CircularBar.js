@@ -1,13 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as Progress from 'react-native-progress'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faFireAlt } from '@fortawesome/free-solid-svg-icons'
+import { RepasContext } from './AppStack'
 
 const CircularBar = () => {
+  const {Repas1, Repas2, Repas3, Repas4, Repas5, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes} = useContext(RepasContext)
+console.log(BrFait, CalIng)
   const Cstate ={
-    TotCal : 2370,
-    Calingerees : 650,
+    TotCal : TotalCal,
+    Calingerees : CalIng,
   };
   const Cprops ={
     progress: Cstate.Calingerees / Cstate.TotCal,
@@ -22,11 +25,11 @@ const CircularBar = () => {
     strokeCap: 'round',
   };
   const Bstate ={
-    Glucides : 60,
+    Glucides : glucides,
     GlucidesMax : 354,
-    Graisses : 66,
+    Graisses : graisses,
     GraissesMax : 105,
-    Proteines : 190,
+    Proteines : protienes,
     ProteinesMax : 177,
   };
   const Bprops ={

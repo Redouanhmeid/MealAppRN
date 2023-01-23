@@ -1,5 +1,5 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions, StatusBar } from 'react-native'
-import React, { useContext, useState, useEffect } from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
@@ -15,29 +15,28 @@ const windowHeight = Dimensions.get('screen').height
 const CloseIcon = () => (
   <FontAwesomeIcon icon={ faClose } style={styles.closeicon} size={ 32 }/>
 );
-const BreakfastTitleModal = () => (
-  <Text category='h5' style={styles.titlemodal}>Petit-déjeuner</Text>
+const EnCas1TitleModal = () => (
+  <Text category='h5' style={styles.titlemodal}>Deuxième En-Cas</Text>
 );
 const DeleteIcon = () => (
   <FontAwesomeIcon icon={ faTrashAlt } style={styles.closeicon} size={ 18 }/>
 );
-
-const ModalBreakfast = ({toModalBreakfast}) => {
+  
+const ModalEnCas2 = ({toModalEnCas2}) => {
   let tempDate = new Date()
   let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
   const {programId} = useContext(AuthContext)
-  const {getRepasFait, Repas1, BrFait} = useContext(RepasContext)
-  const Repas = Repas1
+  const {getRepasFait, Repas5, E2Fait} = useContext(RepasContext)
+  const Repas = Repas5
   const [isLoaded, setIsLoaded] = useState(true)
 
   useEffect(()=>{
-    if(Repas1 !== undefined || null){setIsLoaded(false)}
+    if(Repas5 !== undefined || null){setIsLoaded(false)}
   })
-
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
-      onPress={() => toModalBreakfast.setBreakFastVisible(false)}
+      onPress={() => toModalEnCas2.setEnCas2Visible(false)}
     />
   );
 
@@ -50,33 +49,33 @@ const ModalBreakfast = ({toModalBreakfast}) => {
   );
   const renderCardFooter = () => (
     <View style={styles.CardFooter}>
-      <Layout style={styles.macroleft} ><Text category='h4'>{Foods.find(food => food.id == Repas).protein} g</Text><Text category='c1'>Protéines</Text></Layout>
+      <Layout style={styles.macroleft}  ><Text category='h4'>{Foods.find(food => food.id == Repas).protein} g</Text><Text category='c1'>Protéines</Text></Layout>
       <Layout style={styles.macrocenter}><Text category='h4'>{Foods.find(food => food.id == Repas).glucide} g</Text><Text category='c1'>Glucides</Text></Layout>
       <Layout style={styles.macrocright}><Text category='h4'>{Foods.find(food => food.id == Repas).lipide} g</Text><Text category='c1'>Graisses</Text></Layout>
     </View>
   );
 
   const Fait = async () => {
-    const ubreakfastfait ={
-      breakfastfait: 1,
+    const uencas2fait ={
+      encas2fait: 1,
       Id_Program: programId,
       Repas_Day: ftodayDate
     };
-    axios.post(`${BASE_URL}/wp-json/repas/ubreakfastfait`, ubreakfastfait)
+    axios.post(`${BASE_URL}/wp-json/repas/uencas2fait`, uencas2fait)
       .then(getRepasFait(ftodayDate))
       .catch(err => {console.log(err.response.data.message)})
-      .finally(() => toModalBreakfast.setBreakFastVisible(false))
+      .finally(() => toModalEnCas2.setEnCas2Visible(false))
   }
   const Delete = async () => {
-    const ubreakfastfait ={
-      breakfastfait: 0,
+    const uencas2fait ={
+      encas2fait: 0,
       Id_Program: programId,
       Repas_Day: ftodayDate
     };
-    axios.post(`${BASE_URL}/wp-json/repas/ubreakfastfait`, ubreakfastfait)
+    axios.post(`${BASE_URL}/wp-json/repas/uencas2fait`, uencas2fait)
       .then(getRepasFait(ftodayDate))
       .catch(err => {console.log(err.response.data.message)})
-      .finally(() => toModalBreakfast.setBreakFastVisible(false))
+      .finally(() => toModalEnCas2.setEnCas2Visible(false))
   }
   if(isLoaded) {
     return (
@@ -88,7 +87,7 @@ const ModalBreakfast = ({toModalBreakfast}) => {
   return (
     <SafeAreaView style={styles.ModalContainer}>
       <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
-      <TopNavigation style={styles.ModalTopContainer} title={BreakfastTitleModal} accessoryLeft={renderBackAction}/>
+      <TopNavigation style={styles.ModalTopContainer} title={EnCas1TitleModal} accessoryLeft={renderBackAction}/>
       <ScrollView style={styles.container}>
         <ImageBackground
           style={styles.image}
@@ -109,13 +108,13 @@ const ModalBreakfast = ({toModalBreakfast}) => {
         <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
-        <Button style={styles.btn} size={'large'} onPress={BrFait ? Delete : Fait} accessoryRight={BrFait && DeleteIcon}>Fait</Button>
+        <Button style={{width: windowWidth-50}} size={'large'} onPress={E2Fait ? Delete : Fait} accessoryRight={E2Fait && DeleteIcon}>Fait</Button>
       </Layout>
     </SafeAreaView>
   )
 }
 
-export default ModalBreakfast
+export default ModalEnCas2
 
 const styles = StyleSheet.create({
   spinnercontainer: {
@@ -234,8 +233,5 @@ const styles = StyleSheet.create({
   },
   closeicon: {
     color: '#fff',
-  },
-  btn: {
-    width: windowWidth-50,
   },
 });
