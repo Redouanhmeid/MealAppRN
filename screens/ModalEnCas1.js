@@ -26,12 +26,12 @@ const ModalEnCas1 = ({toModalEnCas1}) => {
   let tempDate = new Date()
   let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
   const {programId} = useContext(AuthContext)
-  const {getRepasFait, Repas4, E1Fait} = useContext(RepasContext)
-  const Repas = Repas4
+  const {getRepasFait, E1Fait} = useContext(RepasContext)
+  const Repas = toModalEnCas1.Repas4
   const [isLoaded, setIsLoaded] = useState(true)
 
   useEffect(()=>{
-    if(Repas4 !== undefined || null){setIsLoaded(false)}
+    if(Repas !== undefined || null){setIsLoaded(false)}
   })
 
   const renderBackAction = () => (

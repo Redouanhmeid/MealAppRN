@@ -26,12 +26,12 @@ const ModalDinner = ({toModalDinner}) => {
   let tempDate = new Date()
   let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
   const {programId} = useContext(AuthContext)
-  const {getRepasFait, Repas3, DnFait} = useContext(RepasContext)
-  const Repas = Repas3
+  const {getRepasFait, DnFait} = useContext(RepasContext)
+  const Repas = toModalDinner.Repas3
   const [isLoaded, setIsLoaded] = useState(true)
 
   useEffect(()=>{
-    if(Repas3 !== undefined || null){setIsLoaded(false)}
+    if(Repas !== undefined || null){setIsLoaded(false)}
   })
 
   const renderBackAction = () => (

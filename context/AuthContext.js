@@ -11,42 +11,45 @@ export const AuthProvider = ({children}) => {
     const [userInfo, setUserInfo] =useState(null)
     const [leadId, setLeadId] =useState(null)
     const [programId, setProgramId] = useState(null)
+    const [errStatus, setErrStatus] = useState(null)
 
     const login = async (username, password) => {
-        setIsLoading(true);
-        try {
-            const res = await axios.post(`${BASE_URL}/wp-json/jwt-auth/v1/token`, {username, password})
-            let userInfo = res.data
-            await setUserInfo(res.data)
-            await setUserToken(res.data.token)
-            await AsyncStorage.setItem('userInfo', JSON.stringify(res.data))
-            await AsyncStorage.setItem('userToken', res.data.token)
-                var paramsId = {
-                    url: `${BASE_URL}/wp-json/leads/mail/${res.data.user_email}`,
-                    method: 'get',
-                    rejectUnauthorized: false,//add when working with https sites
-                    requestCert: false,//add when working with https sites
-                    agent: false,//add when working with https sites
-                  }
-                const resId = await axios(paramsId)
-                let LeadId = resId.data[0]
-                await setLeadId(resId.data[0])
-                await AsyncStorage.setItem('leadId', JSON.stringify(resId.data[0]))
-                var paramsProg = {
-                    url: `${BASE_URL}/wp-json/repas/idprogrambylead/${resId.data[0].Id}`,
-                    method: 'get',
-                    rejectUnauthorized: false,//add when working with https sites
-                    requestCert: false,//add when working with https sites
-                    agent: false,//add when working with https sites
-                }
-                const resProg = await axios(paramsProg)
-                setProgramId(resProg.data[0].Id_Program)
-                await AsyncStorage.setItem('programId', resProg.data[0].Id_Program)
+      setIsLoading(true);
+      try {
+        const res = await axios.post(`${BASE_URL}/wp-json/jwt-auth/v1/token`, {username, password})
+        let userInfo = res.data
+        await setUserInfo(res.data)
+        await setUserToken(res.data.token)
+        await AsyncStorage.setItem('userInfo', JSON.stringify(res.data))
+        await AsyncStorage.setItem('userToken', res.data.token)
+        var paramsId = {
+          url: `${BASE_URL}/wp-json/leads/mail/${res.data.user_email}`,
+          method: 'get',
+          rejectUnauthorized: false,//add when working with https sites
+          requestCert: false,//add when working with https sites
+          agent: false,//add when working with https sites
         }
-        catch(err) {
-            console.error(err);
+        const resId = await axios(paramsId)
+        let LeadId = resId.data[0]
+        await setLeadId(resId.data[0])
+        await AsyncStorage.setItem('leadId', JSON.stringify(resId.data[0]))
+        var paramsProg = {
+          url: `${BASE_URL}/wp-json/repas/idprogrambylead/${resId.data[0].Id}`,
+          method: 'get',
+          rejectUnauthorized: false,//add when working with https sites
+          requestCert: false,//add when working with https sites
+          agent: false,//add when working with https sites
         }
-        setIsLoading(false);
+        const resProg = await axios(paramsProg)
+        setProgramId(resProg.data[0].Id_Program)
+        await AsyncStorage.setItem('programId', resProg.data[0].Id_Program)
+        setErrStatus(null)
+      }
+      catch(err) {
+        setErrStatus(err.response?.status)
+        console.log(err.response)
+      }
+      setIsLoading(false);
     }
 
     const UpdateLeadStorage = async () => {
@@ -97,7 +100,7 @@ export const AuthProvider = ({children}) => {
     }, [programId])
 
     return (
-        <AuthContext.Provider value={{login, logout, UpdateLeadStorage, isLoading, userToken, userInfo, leadId, programId}}>
+        <AuthContext.Provider value={{login, logout, UpdateLeadStorage, isLoading, userToken, userInfo, leadId, programId, errStatus}}>
             {children}
         </AuthContext.Provider>
     )

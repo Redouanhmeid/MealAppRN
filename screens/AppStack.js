@@ -40,6 +40,7 @@ const AppStack = ({children}) => {
   const [glucides, setGlucides] = useState(0)
   const [graisses, setGraisses] = useState(0)
   const [protienes, setProtiennes] = useState(0)
+  const [errStatus, setErrStatus] = useState(false)
 
   function basicmeta(sex) {
     if (sex === "Homme") {
@@ -204,8 +205,9 @@ const AppStack = ({children}) => {
         if(res.data[0].Repas[9] !== undefined || null){
           setRepas5(res.data[0].Repas[9])
         }
+        setErrStatus(false)
       } catch (error) {
-        console.error(error);
+        setErrStatus(true)
       }
   }
   useEffect(() => {
@@ -232,13 +234,14 @@ const AppStack = ({children}) => {
       else{setE1Fait(false)}
       if(res.data[0].encas2fait !== '0'){setE2Fait(true)}
       else{setE2Fait(false)}
+      setErrStatus(false)
     } catch (error) {
-    console.error(error);
+      setErrStatus(true)
     }
   }
 
   return (
-    <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes}}>
+    <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes, errStatus}}>
       {children}
       <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
         <Layout style={styles.container} level='1'>

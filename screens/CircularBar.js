@@ -7,7 +7,7 @@ import { RepasContext } from './AppStack'
 
 const CircularBar = () => {
   const {Repas1, Repas2, Repas3, Repas4, Repas5, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes} = useContext(RepasContext)
-console.log(BrFait, CalIng)
+
   const Cstate ={
     TotCal : TotalCal,
     Calingerees : CalIng,

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
 import { Input, Layout, Button, Text, Avatar } from '@ui-kitten/components'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,10 +8,18 @@ import { AuthProvider, AuthContext } from '../context/AuthContext'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const LoginScreen = ({navigation}) => {
-    const {login} = useContext(AuthContext);
+    const {login, errStatus} = useContext(AuthContext);
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
-  
+    const [txtErr, setTxtErr] = useState('')
+    useEffect(() => {
+      if(errStatus === 403){
+        setTxtErr('Identifiant ou mot de passe incorrect')
+      }
+      else if(errStatus !== null){
+        setTxtErr('Échec de la connexion')
+      }
+    }, [txtErr])
     const renderIcon = () => (
       <FontAwesomeIcon icon={faLock} size={22} color={'#8f9bb3'} />
     );
@@ -23,6 +31,16 @@ const LoginScreen = ({navigation}) => {
         </View>
       )
     }
+    const renderError = () => {
+      if(errStatus !== null){
+        return (
+          <View style={styles.controlContainer}>
+            <Text color="#932C06">{txtErr}</Text>
+          </View>
+        )
+      }
+      return null;
+    }
    
     return(
     <AuthProvider>
@@ -30,9 +48,9 @@ const LoginScreen = ({navigation}) => {
       <Layout style={styles.container}>
         <Layout style={styles.layout} level='1'>
         <Image
-        style={styles.logo}
-        source={require('../assets/logo.png')}
-      />
+          style={styles.logo}
+          source={require('../assets/logo.png')}
+        />
           <Text style={styles.text} category='h3'>Connectez-vous</Text>
           <Input
             style={styles.input}
@@ -52,7 +70,7 @@ const LoginScreen = ({navigation}) => {
             secureTextEntry={true}
           />
           <Button style={styles.button} onPress={() => {login(email, password)}} size='giant'>S'IDENTIFIER</Button>
-          <Text style={styles.text}>ou, connectez-vous avec</Text>
+          {/* <Text style={styles.text}>ou, connectez-vous avec</Text>
           <Layout style={styles.socialmedia}>
             <Layout style={styles.layout} level='1'></Layout>
             <Layout style={styles.layout} level='1'>
@@ -65,8 +83,10 @@ const LoginScreen = ({navigation}) => {
               <Button style={styles.twitter} size='large'><Icon name='twitter' /></Button>
             </Layout>
             <Layout style={styles.layout} level='1'></Layout>
-          </Layout>
+          </Layout> */}
           <Text style={styles.text} category='s1'> Nouveau sur l'application? <Text style={styles.link}>S'inscrire</Text> </Text>
+          
+          {renderError()}
         </Layout>
     </Layout>
     </KeyboardAwareScrollView>
@@ -80,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    paddingTop: 60,
+    paddingTop: 80,
   },
   socialmedia: {
     flexDirection: 'row',
@@ -98,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '92%',
     marginHorizontal: 16,
-    marginVertical: 8,
+    marginVertical: 18,
   },
   text: {
     marginVertical: 28,
@@ -132,5 +152,11 @@ const styles = StyleSheet.create({
   captionText: {
     fontSize: 14,
     color: "#8F9BB3",
-  }
+  },
+  controlContainer: {
+    borderRadius: 6,
+    margin: 14,
+    padding: 14,
+    backgroundColor: '#FFD9A1',
+  },
 });

@@ -68,12 +68,13 @@ const DinnerTitleModal = () => (
 );
 
 const Nutrution = () => {
-  const {getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait} = useContext(RepasContext)
+  const {Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, errStatus} = useContext(RepasContext)
   const {leadId} = useContext(AuthContext)
   const NRepas = leadId.nrepas
   let tempDate = new Date()
   let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
-  
+  let day = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
+ 
   const [visible, setVisible] = useState(false)
   const [BreakFastvisible, setBreakFastVisible] = useState(false)
   const [EnCas1visible, setEnCas1Visible] = useState(false)
@@ -82,9 +83,19 @@ const Nutrution = () => {
   const [Dinnervisible, setDinnerVisible] = useState(false)
   
   useEffect(() => {
-    getRepasFait(ftodayDate)
+    if(!errStatus){
+      getRepasFait(ftodayDate)
+    }
   }, [BrFait, LnFait, DnFait, E1Fait, E2Fait])
 
+  if(errStatus) {
+    return (
+      <Layout style={styles.nofoodcontainer} level='2'>
+        <Text category='h3' style={styles.nofoodtexttitle}>Votre plan de repas personnel apparaîtra ici</Text>
+        <Text style={styles.nofoodtexttitle}>Pendant ce temps, remplissez votre réfrigérateur d'aliments sains</Text>
+      </Layout>
+    )
+  }
   return (
       <Layout style={styles.container} level='2'>
         <ScrollView>
@@ -130,19 +141,19 @@ const Nutrution = () => {
         </View>
 
         <Modal visible={BreakFastvisible}>
-          <ModalBreakfast toModalBreakfast={{setBreakFastVisible}}/>
+          <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1, day}}/>
         </Modal>
         <Modal visible={Lunchvisible}>
-          <ModalLunch toModalLunch={{setLunchVisible}}/>
+          <ModalLunch toModalLunch={{setLunchVisible, Repas2, day}}/>
         </Modal>
         <Modal visible={Dinnervisible}>
-          <ModalDinner toModalDinner={{setDinnerVisible}}/>
+          <ModalDinner toModalDinner={{setDinnerVisible, Repas3, day}}/>
         </Modal>
         <Modal visible={EnCas1visible}>
-          <ModalEnCas1 toModalEnCas1={{setEnCas1Visible}}/>
+          <ModalEnCas1 toModalEnCas1={{setEnCas1Visible, Repas4, day}}/>
         </Modal>
         <Modal visible={EnCas2visible}>
-          <ModalEnCas2 toModalEnCas2={{setEnCas2Visible}}/>
+          <ModalEnCas2 toModalEnCas2={{setEnCas2Visible, Repas5, day}}/>
         </Modal>
         </ScrollView>
       </Layout>
@@ -152,6 +163,17 @@ const Nutrution = () => {
 export default Nutrution
 
 const styles = StyleSheet.create({
+  nofoodcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+  },
+  nofoodtexttitle: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
   container: {
     flex: 1,
     flexDirection: 'column',

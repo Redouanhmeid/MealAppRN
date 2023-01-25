@@ -37,7 +37,7 @@ const Objectifs = () => {
             source={require('../assets/fire.png')}
         />
         <Text category='h5'>Objectif actuel :</Text>
-        {objectif >= 0 ? <Text category='h2'>+ {objectif} Kg</Text> : <Text category='h2'>- {objectif} Kg</Text>}
+        {objectif >= 0 ? <Text category='h2'>+{objectif} Kg</Text> : <Text category='h2'>{objectif} Kg</Text>}
       </View>
     </Card>
   )

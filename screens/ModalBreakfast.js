@@ -26,12 +26,18 @@ const ModalBreakfast = ({toModalBreakfast}) => {
   let tempDate = new Date()
   let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
   const {programId} = useContext(AuthContext)
-  const {getRepasFait, Repas1, BrFait} = useContext(RepasContext)
-  const Repas = Repas1
+  const {getRepasFait, BrFait} = useContext(RepasContext)
+  const Repas = toModalBreakfast.Repas1
   const [isLoaded, setIsLoaded] = useState(true)
+  const day = toModalBreakfast.day
+  let daytocompare = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
+ const [NotToday, setNotToday] = useState(false)
+  console.log(day, daytocompare)
+  
 
   useEffect(()=>{
-    if(Repas1 !== undefined || null){setIsLoaded(false)}
+    if(Repas !== undefined || null){setIsLoaded(false)}
+    if(day !== daytocompare){setNotToday(true)}
   })
 
   const renderBackAction = () => (
@@ -109,7 +115,7 @@ const ModalBreakfast = ({toModalBreakfast}) => {
         <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
-        <Button style={styles.btn} size={'large'} onPress={BrFait ? Delete : Fait} accessoryRight={BrFait && DeleteIcon}>Fait</Button>
+        <Button style={styles.btn} disabled={NotToday} size={'large'} onPress={BrFait ? Delete : Fait} accessoryRight={BrFait && DeleteIcon}>Fait</Button>
       </Layout>
     </SafeAreaView>
   )

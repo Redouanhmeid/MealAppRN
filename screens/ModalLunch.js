@@ -27,11 +27,11 @@ const ModalLunch = ({toModalLunch}) => {
   let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
   const {programId} = useContext(AuthContext)
   const {getRepasFait, Repas2, LnFait} = useContext(RepasContext)
-  const Repas = Repas2
+  const Repas = toModalLunch.Repas2
   const [isLoaded, setIsLoaded] = useState(true)
 
   useEffect(()=>{
-    if(Repas2 !== undefined || null){setIsLoaded(false)}
+    if(Repas !== undefined || null){setIsLoaded(false)}
   })
   const renderBackAction = () => (
     <TopNavigationAction

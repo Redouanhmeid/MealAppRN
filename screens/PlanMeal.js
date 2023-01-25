@@ -8,6 +8,8 @@ import axios from 'axios'
 import { BASE_URL } from '../client-config'
 import DatePicker from './DatePicker'
 import PlanMealChild from './PlanMealChild'
+import { ScrollView } from 'react-native-gesture-handler';
+import { RepasContext } from './AppStack';
 
 const LeftIcon = () => (
   <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>
@@ -22,7 +24,8 @@ const windowWidth = Dimensions.get('window').width;
 
 const PlanMeal = () => {
   const {programId} = useContext(AuthContext)
-  const [ selectedDate, setSelectedDate ] = useState('Aujourd\'hui')
+  const {errStatus} = useContext(RepasContext)
+  const [selectedDate, setSelectedDate] = useState('Aujourd\'hui')
   const [MinDate, setMinDate] = useState()
   const [MaxDate, setMaxDate] = useState()
   const childCompRef = useRef()
@@ -73,7 +76,14 @@ const PlanMeal = () => {
       console.error(error);
     }
   }
- 
+  if(errStatus) {
+    return (
+      <Layout style={styles.nofoodcontainer} level='2'>
+        <Text category='h3' style={styles.nofoodtexttitle}>Votre plan de repas personnel apparaîtra ici</Text>
+        <Text style={styles.nofoodtexttitle}>Pendant ce temps, remplissez votre réfrigérateur d'aliments sains</Text>
+      </Layout>
+    )
+  }
   return (
     <>
       <Layout style={styles.container} level='2'>
@@ -85,7 +95,13 @@ const PlanMeal = () => {
           </Button>
           <Button onPress={() => childCompRef.current.nextDay()} style={styles.pullright} accessoryLeft={RightIcon} appearance='outline' size='large' />
         </View>
-        <PlanMealChild getD={selectedDate}/>
+        {/* <ScrollView
+          horizontal={true}
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={false}
+        > */}
+          <PlanMealChild getD={selectedDate}/>
+        {/* </ScrollView> */}
       </Layout>
       <DatePicker ref={childCompRef} getD={selectedDate => setSelectedDate(selectedDate)} MinDate={MinDate} MaxDate={MaxDate}/>
     </>
@@ -96,11 +112,22 @@ const PlanMeal = () => {
 export default PlanMeal
 
 const styles = StyleSheet.create({
+  nofoodcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 12,
+  },
+  nofoodtexttitle: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
   container: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingTop: 40,
+    paddingTop: 20,
   },
   text: {
     marginVertical: 8,
@@ -111,7 +138,7 @@ const styles = StyleSheet.create({
     width: windowWidth,
     paddingVertical: 12,
     paddingHorizontal: 15,
-    alignItems: 'center'
+    alignItems: 'flex-start'
   },
   today: {
     justifyContent: 'center',
