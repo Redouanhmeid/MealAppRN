@@ -18,7 +18,7 @@ const SeanceIcon = () => (
   <FontAwesomeIcon icon={ faPersonRunning } size={ 24 } color='#C628A4' />
 );
 
-const Notifications = ({navigation}) => {
+const AppNotifications = ({navigation}) => {
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
@@ -39,7 +39,7 @@ const Notifications = ({navigation}) => {
   )
 }
 
-export default Notifications
+export default AppNotifications
 
 const styles = StyleSheet.create({
   container: {

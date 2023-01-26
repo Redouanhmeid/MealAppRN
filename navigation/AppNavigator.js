@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack'
 import Article from '../screens/Article'
@@ -7,7 +7,7 @@ import { BottomTabs } from './BottomTabs'
 import Settings from '../screens/settings/Settings'
 import Nutrution from '../screens/settings/Nutrution'
 import Compte from '../screens/settings/Compte'
-import Notifications from '../screens/settings/Notifications'
+import AppNotifications from '../screens/settings/Notifications'
 import Detailspersonels from '../screens/settings/Detailspersonels'
 import Aide from '../screens/settings/Aide/Aide'
 import Nousnoter from '../screens/settings/Nousnoter'
@@ -24,9 +24,27 @@ import ReglesdeCommunication from '../screens/settings/Aide/ReglesdeCommunicatio
 import BottomTabs2 from './BottomTabs2'
 import Poids from '../screens/plus/poids'
 import Plus from '../screens/plus/plus'
+import * as Notifications from 'expo-notifications'
+import { useNotifications } from '../useNotifications'
 const { Navigator, Screen } = createStackNavigator();
 
 const AppNavigator = () => {
+  const { registerForPushNotificationsAsync, handleNotificationResponse } = useNotifications()
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+    const responseListener = Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
+    return () => {
+        if (responseListener)
+            Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, [])
   return (
     <NavigationContainer>
         <Navigator 
@@ -41,7 +59,7 @@ const AppNavigator = () => {
             <Screen name={'Paramètres'} component={Settings} />
             <Screen name={'Nutrution'} component={Nutrution} />
             <Screen name={'Compte'} component={Compte} />
-            <Screen name={'Notifications'} component={Notifications} />
+            <Screen name={'AppNotifications'} component={AppNotifications} />
             <Screen name={'Détails personnels'} component={Detailspersonels} />
             <Screen name={'Aide'} component={Aide} />
             <Screen name={'Repas Par Jour'} component={RepasParJour} />

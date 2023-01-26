@@ -68,7 +68,6 @@ const Repas = ({navigation}) => {
   }
   useLayoutEffect(() => {
     requestTimes()
-    console.log(NRepas[0])
   }, [LeadId])
   const renderBackAction = () => (
     <TopNavigationAction

@@ -27,8 +27,7 @@ const Nutrution = ({navigation}) => {
 
   useEffect(()=>{
     getfirstdate(programId)
-    console.log(MinDate)
-  }, [MinDate])
+  }, [programId])
   
   const getfirstdate = async () => {
     try {
@@ -41,8 +40,12 @@ const Nutrution = ({navigation}) => {
       } 
       const res = await axios(params)
       var dt = new Date(res.data[0].Date)
-      let dte = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
-      setMinDate(dte)
+      console.log(res.data[0].Date === null)
+      if (res.data[0].Date === null) {setMinDate()}
+      else{
+        let dte = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
+        setMinDate(dte)
+      }
     } catch (error) {
       console.error(error);
     }

@@ -50,7 +50,7 @@ const Settings = ({navigation, state}) => {
         <Menu style={styles.menu}>
           <MenuItem title='Nutrution' style={styles.menuitem} accessoryLeft={DietIcon} accessoryRight={RightIcon} onPress={() => navigation.navigate('Nutrution')} />
           <MenuItem title='Compte' style={styles.menuitem} accessoryLeft={UserIcon} accessoryRight={RightIcon} onPress={() => navigation.navigate('Compte')} />
-          <MenuItem title='Notifications' style={styles.menuitem} accessoryLeft={NotificationsIcon} accessoryRight={RightIcon} onPress={() => navigation.navigate('Notifications')} />
+          <MenuItem title='Notifications' style={styles.menuitem} accessoryLeft={NotificationsIcon} accessoryRight={RightIcon} onPress={() => navigation.navigate('AppNotifications')} />
         
           <MenuItem title='Détails personnels' style={styles.menuitem, styles.menutop} accessoryLeft={DetailsIcon} accessoryRight={RightIcon} onPress={() => navigation.navigate('Détails personnels')} />
         

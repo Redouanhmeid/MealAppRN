@@ -49,7 +49,7 @@ const BottomTabs2 = ({navigation}) => {
   return (
     <>
       <Navigator
-        initialRouteName="Agenda"
+        initialRouteName="Moi"
         screenOptions={{
           tabBarShowLabel: true,
           headerShown: false,
