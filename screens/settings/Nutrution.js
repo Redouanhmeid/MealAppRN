@@ -40,7 +40,6 @@ const Nutrution = ({navigation}) => {
       } 
       const res = await axios(params)
       var dt = new Date(res.data[0].Date)
-      console.log(res.data[0].Date === null)
       if (res.data[0].Date === null) {setMinDate()}
       else{
         let dte = dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
