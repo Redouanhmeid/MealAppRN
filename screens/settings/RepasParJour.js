@@ -49,7 +49,6 @@ const RepasParJour = ({navigation}) => {
         nrepas: selectedRepas,
     };
     axios.post(`${BASE_URL}/wp-json/leads/nrepas`, urepas)
-        .then(console.log(leadId))
         .catch(err => {console.log(err.response.data.message)})
     UpdateLeadStorage()
     navigation.goBack()

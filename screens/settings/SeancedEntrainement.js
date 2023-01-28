@@ -87,7 +87,6 @@ const SeancedEntrainement = ({navigation}) => {
         agent: false,//add when working with https sites
       }
       const res = await axios(params)
-      console.log(res.data[0])
       if(res.data[0].workout_days[1] === '1'){setLundiChecked(true), workout.days[0]=1}
       else if(res.data[0].workout_days[1] !== '1'){setLundiChecked(false), workout.days[0]=0}
       if(res.data[0].workout_days[3] === '1'){setMardiChecked(true), workout.days[1]=1}
@@ -127,7 +126,6 @@ const SeancedEntrainement = ({navigation}) => {
         agent: false,//add when working with https sites
       }
       const res = await axios(params)
-      console.log(res.data[0])
       setTime(res.data[0].WorkoutTime)
       date.setHours(res.data[0].WorkoutTime.slice(0, 2))
       date.setMinutes(res.data[0].WorkoutTime.slice(3, 5))

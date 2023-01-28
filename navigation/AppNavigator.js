@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
+import { Button } from '@ui-kitten/components'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack'
 import Article from '../screens/Article'
@@ -26,12 +27,16 @@ import Poids from '../screens/plus/poids'
 import Plus from '../screens/plus/plus'
 import * as Notifications from 'expo-notifications'
 import { useNotifications } from '../useNotifications'
+import { scheduleNotifications } from '../utils/sendPushNotification'
 const { Navigator, Screen } = createStackNavigator();
 
 const AppNavigator = () => {
-  const { registerForPushNotificationsAsync, handleNotificationResponse } = useNotifications()
+  const { registerForPushNotificationsAsync } = useNotifications()
+  const [expoPushToken, setExpoPushToken] = useState('');
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
   useEffect(() => {
-    registerForPushNotificationsAsync()
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
@@ -39,13 +44,23 @@ const AppNavigator = () => {
         shouldSetBadge: true,
       }),
     });
-    const responseListener = Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
+    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      setNotification(notification);
+    });
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log(response);
+    });
     return () => {
-        if (responseListener)
-            Notifications.removeNotificationSubscription(responseListener);
+      scheduleNotifications(expoPushToken)
+      Notifications.removeNotificationSubscription(notificationListener.current);
+      Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, [])
   return (
+    <>
     <NavigationContainer>
         <Navigator 
           screenOptions={{
@@ -75,6 +90,7 @@ const AppNavigator = () => {
             <Screen name={'Poids'} component={Poids} />
         </Navigator>
     </NavigationContainer>
+    </>
   )
 }
 
