@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, StyleSheet, Image } from 'react-native'
 import { Button, Layout, Text, Modal } from '@ui-kitten/components'
 import Eau from './eau';
@@ -9,6 +9,7 @@ import ModalLunch from '../ModalLunch';
 import ModalDinner from '../ModalDinner';
 import { NativeViewGestureHandler } from 'react-native-gesture-handler';
 import ModalEnCas2 from '../ModalEnCas2';
+import { RepasContext } from '../AppStack';
 
   const WaterImage = () => (
     <Image style={styles.img} source={require('../../assets/water.png')} />
@@ -31,12 +32,17 @@ import ModalEnCas2 from '../ModalEnCas2';
 
 
 const Plus = ({ navigation }) => {
+  const {Repas1, Repas2, Repas3, Repas4, Repas5} = useContext(RepasContext)
   const [Eauvisible, setEauVisible] = useState(false)
   const [BreakFastvisible, setBreakFastVisible] = useState(false)
   const [EnCas1visible, setEnCas1Visible] = useState(false)
   const [Lunchvisible, setLunchVisible] = useState(false)
   const [EnCas2visible, setEnCas2Visible] = useState(false)
   const [Dinnervisible, setDinnerVisible] = useState(false)
+  let tempDate = new Date()
+  let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
+  let day = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear()
+ 
 
   return (
     <NativeViewGestureHandler disallowInterruption={true}>
@@ -77,20 +83,20 @@ const Plus = ({ navigation }) => {
         <Eau toEau={{setEauVisible}}/>
       </Modal>
       <Modal visible={BreakFastvisible}>
-        <ModalBreakfast toModalBreakfast={{setBreakFastVisible}}/>
-      </Modal>
-      <Modal visible={EnCas1visible}>
-        <ModalEnCas1 toModalEnCas1={{setEnCas1Visible}}/>
-      </Modal>
-      <Modal visible={Lunchvisible}>
-        <ModalLunch toModalLunch={{setLunchVisible}}/>
-      </Modal>
-      <Modal visible={Dinnervisible}>
-        <ModalDinner toModalDinner={{setDinnerVisible}}/>
-      </Modal>
-      <Modal visible={EnCas2visible}>
-          <ModalEnCas2 toModalEnCas2={{setEnCas2Visible}}/>
-      </Modal>
+          <ModalBreakfast toModalBreakfast={{setBreakFastVisible, Repas1, day}}/>
+        </Modal>
+        <Modal visible={Lunchvisible}>
+          <ModalLunch toModalLunch={{setLunchVisible, Repas2, day}}/>
+        </Modal>
+        <Modal visible={Dinnervisible}>
+          <ModalDinner toModalDinner={{setDinnerVisible, Repas3, day}}/>
+        </Modal>
+        <Modal visible={EnCas1visible}>
+          <ModalEnCas1 toModalEnCas1={{setEnCas1Visible, Repas4, day}}/>
+        </Modal>
+        <Modal visible={EnCas2visible}>
+          <ModalEnCas2 toModalEnCas2={{setEnCas2Visible, Repas5, day}}/>
+        </Modal>
     </Layout>
     </NativeViewGestureHandler>
   )

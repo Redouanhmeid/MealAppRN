@@ -14,6 +14,7 @@ export const RepasContext = createContext()
 
 const AppStack = ({children}) => {
   const {leadId, programId} = useContext(AuthContext)
+  const LeadId = leadId.Id
   const NRepas = leadId.nrepas
   let tempDate = new Date()
   let today = tempDate.toLocaleDateString('fr')
@@ -239,9 +240,62 @@ const AppStack = ({children}) => {
       setErrStatus(true)
     }
   }
-
+  
+  const [BrNotif, setBrNotif] = useState(false)
+  const [LnNotif, setLnNotif] = useState(false)
+  const [DnNotif, setDnNotif] = useState(false)
+  const [E1Notif, setE1Notif] = useState(false)
+  const [E2Notif, setE2Notif] = useState(false)
+  const getMealsNotifications = async () => {
+    try {
+      var params = {
+        url: `${BASE_URL}/wp-json/lead/mealsnotifications/${LeadId}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      }
+      const res = await axios(params)
+      if(res.data[0].meals_notifications[1] === '1'){setBrNotif(true)}
+      else{setBrNotif(false)}
+      if(res.data[0].meals_notifications[3] === '1'){setLnNotif(true)}
+      else{setLnNotif(false)}
+      if(res.data[0].meals_notifications[5] === '1'){setDnNotif(true)}
+      else{setDnNotif(false)}
+      if(res.data[0].meals_notifications[7] === '1'){setE1Notif(true)}
+      else{setE1Notif(false)}
+      if(res.data[0].meals_notifications[9] === '1'){setE2Notif(true)}
+      else{setE2Notif(false)}
+    } catch (error) {
+      setErrStatus(true)
+    }
+  }
+  const [BreakFastTime, setBreakFastTime] = useState()
+  const [LunchTime, setLunchTime] = useState()
+  const [DinnerTime, setDinnerTime] = useState()
+  const [EnCas1Time, setEnCas1Time] = useState()
+  const [EnCas2Time, setEnCas2Time] = useState()
+  const requestTimes = async () => {
+    try {
+      var params = {
+        url: `${BASE_URL}/wp-json/repas/repastimes/${LeadId}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      }
+      const res = await axios(params)
+      setBreakFastTime(res.data[0].BreakFastTime)
+      setLunchTime(res.data[0].LunchTime)
+      setDinnerTime(res.data[0].DinnerTime)
+      setEnCas1Time(res.data[0].EnCas1Time)
+      setEnCas2Time(res.data[0].EnCas2Time)
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
-    <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes, errStatus}}>
+    <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes, errStatus, getMealsNotifications, BrNotif, LnNotif, DnNotif, E1Notif, E2Notif, requestTimes, BreakFastTime, LunchTime, DinnerTime, EnCas1Time, EnCas2Time }}>
       {children}
       <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
         <Layout style={styles.container} level='1'>

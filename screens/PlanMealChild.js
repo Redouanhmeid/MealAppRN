@@ -186,15 +186,15 @@ const PlanMealChild = ({getD}) => {
       <Text category='h5'>{Foods.find(food => food.id == Repas5).foodName}</Text>
     </View>
   )
-  ItemInfos1.propTypes= {Repas1: propTypes.string}
+  ItemInfos1.propTypes= {Repas1: propTypes.any}
   ItemInfos1.defaultProps = {Repas1: Repas1}
-  ItemInfos2.propTypes= {Repas2: propTypes.string}
+  ItemInfos2.propTypes= {Repas2: propTypes.any}
   ItemInfos2.defaultProps = {Repas2: Repas2}
-  ItemInfos3.propTypes= {Repas3: propTypes.string}
+  ItemInfos3.propTypes= {Repas3: propTypes.any}
   ItemInfos3.defaultProps = {Repas3: Repas3}
-  ItemInfos4.propTypes= {Repas4: propTypes.string}
+  ItemInfos4.propTypes= {Repas4: propTypes.any}
   ItemInfos4.defaultProps = {Repas4: Repas4}
-  ItemInfos5.propTypes= {Repas5: propTypes.string}
+  ItemInfos5.propTypes= {Repas5: propTypes.any}
   ItemInfos5.defaultProps = {Repas5: Repas5}
   
   if(isLoaded) {

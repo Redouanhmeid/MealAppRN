@@ -17,13 +17,48 @@ const BackIcon = () => (
 
 const SeancedEntrainement = ({navigation}) => {
   const {leadId} = useContext(AuthContext)
+  const LeadId = leadId.Id
   const [checked, setChecked] = useState(false)
   const [isLoaded, setIsLoaded] = useState(true)
+
+  const getNotif = async () => {
+    try {
+      var params = {
+        url: `${BASE_URL}/wp-json/lead/workoutnotifications/${LeadId}`,
+        method: 'get',
+        rejectUnauthorized: false,//add when working with https sites
+        requestCert: false,//add when working with https sites
+        agent: false,//add when working with https sites
+      }
+      const res = await axios(params)
+      if (res.data[0].workout_notifications === "1") {setChecked(true)}
+      else if (res.data[0].workout_notifications === "0") {setChecked(false)}
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  var notif = {
+    workout_notifications: "0"
+  }
+  useEffect(() => {
+    if(checked){notif.workout_notifications = "1"}
+    else {notif.workout_notifications = "0"}
+  }, [checked])
+  const putNotif = async () => {
+    const unotif = {
+      Id: LeadId,
+      workout_notifications: notif.workout_notifications
+    }
+    axios.post(`${BASE_URL}/wp-json/lead/workoutnotifications/`, unotif)
+      .then(console.log(unotif))
+      .catch(err => {console.log(err.response.data.message)})
+  }
   
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
-      onPress={() => {putWorkoutdays(), putTime(), navigation.goBack()}}
+      onPress={() => {putWorkoutdays(), putTime(), putNotif(), navigation.goBack()}}
     />
   );
   const onCheckedChange = (isChecked) => {setChecked(isChecked)}
@@ -44,9 +79,8 @@ const SeancedEntrainement = ({navigation}) => {
     }
     setMode(currentMode);
   };
-  const showTimepicker = () => {
-    showMode('time');
-  };
+  const showTimepicker = () => {showMode('time')};
+
   const [lundichecked, setLundiChecked] = useState(false)
   const [mardichecked, setMardiChecked] = useState(false)
   const [mercredichecked, setMercrediChecked] = useState(false)
@@ -144,6 +178,7 @@ const SeancedEntrainement = ({navigation}) => {
       .catch(err => {console.log(err.response.data.message)})
   }
   useLayoutEffect(()=>{
+    getNotif()
     getWorkoutdays()
     getTime()
   }, [leadId.Id])
