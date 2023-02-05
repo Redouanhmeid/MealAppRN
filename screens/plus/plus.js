@@ -1,15 +1,16 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useLayoutEffect } from 'react'
 import { View, StyleSheet, Image } from 'react-native'
 import { Button, Layout, Text, Modal } from '@ui-kitten/components'
-import Eau from './eau';
-import Poids from './poids';
-import ModalBreakfast from '../ModalBreakfast';
-import ModalEnCas1 from '../ModalEnCas1';
-import ModalLunch from '../ModalLunch';
-import ModalDinner from '../ModalDinner';
-import { NativeViewGestureHandler } from 'react-native-gesture-handler';
-import ModalEnCas2 from '../ModalEnCas2';
-import { RepasContext } from '../AppStack';
+import Eau from './eau'
+import Poids from './poids'
+import ModalBreakfast from '../ModalBreakfast'
+import ModalEnCas1 from '../ModalEnCas1'
+import ModalLunch from '../ModalLunch'
+import ModalDinner from '../ModalDinner'
+import { NativeViewGestureHandler } from 'react-native-gesture-handler'
+import ModalEnCas2 from '../ModalEnCas2'
+import { RepasContext } from '../../context/RepasContext'
+import { AuthContext } from '../../context/AuthContext'
 
   const WaterImage = () => (
     <Image style={styles.img} source={require('../../assets/water.png')} />
@@ -33,6 +34,7 @@ import { RepasContext } from '../AppStack';
 
 const Plus = ({ navigation }) => {
   const {Repas1, Repas2, Repas3, Repas4, Repas5} = useContext(RepasContext)
+  const {programId} = useContext(AuthContext)
   const [Eauvisible, setEauVisible] = useState(false)
   const [BreakFastvisible, setBreakFastVisible] = useState(false)
   const [EnCas1visible, setEnCas1Visible] = useState(false)
@@ -41,7 +43,7 @@ const Plus = ({ navigation }) => {
   const [Dinnervisible, setDinnerVisible] = useState(false)
   let date = new Date()
   let ftodayDate = date.toLocaleDateString('en-CA')
-
+  
   return (
     <NativeViewGestureHandler disallowInterruption={true}>
     <Layout style={styles.container} level='1'>

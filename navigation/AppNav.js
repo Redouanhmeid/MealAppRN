@@ -1,15 +1,11 @@
-import { View, Text, ActivityIndicator } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
-import * as eva from '@eva-design/eva'
-import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
-import { default as theme } from '../theme.json'
+import { View, ActivityIndicator } from 'react-native'
+import { useContext } from 'react'
 import LoginScreen from '../screens/login'
-import AppStack from '../screens/AppStack'
-import { AuthProvider, AuthContext } from '../context/AuthContext'
-import { EvaIconsPack } from '@ui-kitten/eva-icons'
+import AppStack from './AppStack'
+import { AuthContext } from '../context/AuthContext'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { NavigationContainer } from '@react-navigation/native'
 import AuthStack from '../screens/AuthStack'
+import { RepasProvider } from '../context/RepasContext'
 
 const AppNav = ({children}) => {
   const {isLoading, userToken} = useContext(AuthContext)
@@ -22,7 +18,9 @@ const AppNav = ({children}) => {
     }
     return (
       <SafeAreaProvider>
-        {userToken !== null ? <AppStack /> : <AuthStack />}
+        <RepasProvider>
+          {userToken !== null ? <AppStack /> : <AuthStack />}
+        </RepasProvider>
       </SafeAreaProvider>
     )
 }

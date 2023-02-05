@@ -1,5 +1,5 @@
-import { View, StyleSheet } from 'react-native'
-import React, { useState, useRef, useCallback, useMemo } from 'react'
+import { StyleSheet } from 'react-native'
+import React, { useRef, useCallback, useMemo } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import BottomSheet, { BottomSheetBackdrop} from '@gorhom/bottom-sheet'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'

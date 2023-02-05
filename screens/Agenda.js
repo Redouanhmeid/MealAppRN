@@ -6,7 +6,7 @@ import { faPlusCircle, faCheckCircle, faCalendarAlt } from '@fortawesome/free-so
 import ModalBreakfast from '../screens/ModalBreakfast'
 import axios from 'axios'
 import { BASE_URL } from '../client-config'
-import { getRepasFait2, RepasContext } from './AppStack'
+import { RepasContext } from '../context/RepasContext'
 import { AuthContext } from '../context/AuthContext'
 import ModalEnCas1 from './ModalEnCas1'
 import ModalLunch from './ModalLunch'
@@ -34,7 +34,7 @@ const DinnerTitleModal = () => (<Text category='h5' style={styles.titlemodal}>DÃ
 const renderDateIcon = () => (<FontAwesomeIcon icon={ faCalendarAlt } size={ 24 } color={'#6c757d'} />);
 
 const Nutrution = () => {
-  const {Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, requestRepas, errStatus} = useContext(RepasContext)
+  const {requestRepas, Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, errStatus} = useContext(RepasContext)
   const {leadId, programId} = useContext(AuthContext)
   const NRepas = leadId.nrepas
   let tempDate = new Date()

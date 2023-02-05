@@ -1,10 +1,9 @@
-import { View, StyleSheet, Image, ScrollView, TouchableOpacity, Alert, RefreshControl } from 'react-native'
+import { StyleSheet, Image, ScrollView, RefreshControl } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Card, Divider, Layout, Spinner, Text } from '@ui-kitten/components'
 import { BASE_URL } from '../client-config'
 import axios from 'axios'
 import Article from './Article'
-import { waitForDebugger } from 'inspector'
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));

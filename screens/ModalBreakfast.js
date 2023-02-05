@@ -7,7 +7,7 @@ import Foods from '../assets/food2.json'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import { BASE_URL } from '../client-config'
-import { RepasContext } from './AppStack'
+import { RepasContext } from '../context/RepasContext'
 import { AuthContext } from '../context/AuthContext'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height

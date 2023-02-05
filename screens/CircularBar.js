@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import * as Progress from 'react-native-progress'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faFireAlt } from '@fortawesome/free-solid-svg-icons'
-import { RepasContext } from './AppStack'
+import { RepasContext } from '../context/RepasContext'
 
 const CircularBar = () => {
   const {Repas1, Repas2, Repas3, Repas4, Repas5, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes} = useContext(RepasContext)

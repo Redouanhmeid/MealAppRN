@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import { BASE_URL } from '../client-config'
 import { AuthContext } from '../context/AuthContext'
-import { RepasContext } from './AppStack'
+import { RepasContext } from '../context/RepasContext'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 

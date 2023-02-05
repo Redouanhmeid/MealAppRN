@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import { BASE_URL } from '../../client-config'
-import { showMessage } from 'react-native-flash-message'
 const windowWidth = Dimensions.get('screen').width
 
 const BackIcon = () => (

@@ -1,17 +1,12 @@
-import { View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { Button } from '@ui-kitten/components'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack'
 import Article from '../screens/Article'
-import { BottomTabs } from './BottomTabs'
 import Settings from '../screens/settings/Settings'
 import Nutrution from '../screens/settings/Nutrution'
 import Compte from '../screens/settings/Compte'
 import AppNotifications from '../screens/settings/Notifications'
 import Detailspersonels from '../screens/settings/Detailspersonels'
 import Aide from '../screens/settings/Aide/Aide'
-import Nousnoter from '../screens/settings/Nousnoter'
 import RepasParJour from '../screens/settings/RepasParJour'
 import Repas from '../screens/settings/Repas'
 import SeancedEntrainement from '../screens/settings/SeancedEntrainement'
@@ -24,8 +19,6 @@ import Politiquederemboursement from '../screens/settings/Aide/Politiquederembou
 import ReglesdeCommunication from '../screens/settings/Aide/ReglesdeCommunication'
 import BottomTabs2 from './BottomTabs2'
 import Poids from '../screens/plus/poids'
-import Plus from '../screens/plus/plus'
-import { RepasContext } from '../screens/AppStack'
 const { Navigator, Screen } = createStackNavigator();
 
 const AppNavigator = () => {

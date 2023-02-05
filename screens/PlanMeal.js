@@ -8,8 +8,8 @@ import axios from 'axios'
 import { BASE_URL } from '../client-config'
 import DatePicker from './DatePicker'
 import PlanMealChild from './PlanMealChild'
-import { ScrollView } from 'react-native-gesture-handler';
-import { RepasContext } from './AppStack';
+import { ScrollView } from 'react-native-gesture-handler'
+import { RepasContext } from '../context/RepasContext'
 
 const LeftIcon = () => (
   <FontAwesomeIcon icon={ faAngleLeft } style={styles.icon} size={ 24 }/>

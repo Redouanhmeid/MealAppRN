@@ -1,7 +1,7 @@
 import { View, StyleSheet, Dimensions, TouchableOpacity, BackHandler } from 'react-native'
 import React, { useState, useContext, useLayoutEffect, useEffect } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import { RepasContext } from '../../screens/AppStack'
+import { RepasContext } from '../../context/RepasContext'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { Layout, Toggle, Button, Modal, Card, TopNavigation, TopNavigationAction, Text, Divider, Spinner } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'

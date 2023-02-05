@@ -1,18 +1,12 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import BottomTabs from '../navigation/BottomTabs'
-import { ApplicationProvider, BottomNavigation, BottomNavigationTab, IconRegistry, Layout } from '@ui-kitten/components'
-import AppNavigator from '../navigation/AppNavigator'
-import { default as theme } from '../theme.json'
-import * as eva from '@eva-design/eva'
-import { AuthContext } from '../context/AuthContext'
-import { BASE_URL } from '../client-config'
-import axios from 'axios'
+import { createContext, useContext, useState, useEffect, useLayoutEffect } from "react"
+import { AuthContext } from "./AuthContext"
+import { BASE_URL } from "../client-config"
+import axios from "axios"
 import Foods from '../assets/food2.json'
 
 export const RepasContext = createContext()
 
-const AppStack = ({children}) => {
+export const RepasProvider = ({children}) => {
   const {leadId, programId} = useContext(AuthContext)
   const LeadId = leadId.Id
   const NRepas = leadId.nrepas
@@ -23,13 +17,11 @@ const AppStack = ({children}) => {
   const [Repas3, setRepas3] = useState()
   const [Repas4, setRepas4] = useState()
   const [Repas5, setRepas5] = useState()
-
   const [BrFait, setBrFait] = useState(false)
   const [LnFait, setLnFait] = useState(false)
   const [DnFait, setDnFait] = useState(false)
   const [E1Fait, setE1Fait] = useState(false)
   const [E2Fait, setE2Fait] = useState(false)
-
   const sex = leadId.sexe
   const weight = parseInt(leadId.poidsactuel)
   const Height = parseInt(leadId.taille)
@@ -42,7 +34,6 @@ const AppStack = ({children}) => {
   const [graisses, setGraisses] = useState(0)
   const [protienes, setProtiennes] = useState(0)
   const [errStatus, setErrStatus] = useState(false)
-
   function basicmeta(sex) {
     if (sex === "Homme") {
       return parseInt((weight * 10) + (Height * 6.25) - (old * 5) + 5);
@@ -186,6 +177,7 @@ const AppStack = ({children}) => {
       }
     }
   }, [BrFait])
+
   
   const requestRepas = async (Item, day) => {
     try {
@@ -211,7 +203,7 @@ const AppStack = ({children}) => {
         setErrStatus(true)
       }
   }
-  useEffect(() => {
+  useLayoutEffect(() => {
     requestRepas(programId, today)
   }, [today])
 
@@ -296,34 +288,8 @@ const AppStack = ({children}) => {
   }
   return (
     <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, requestRepas, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes, errStatus, getMealsNotifications, BrNotif, LnNotif, DnNotif, E1Notif, E2Notif, requestTimes, BreakFastTime, LunchTime, DinnerTime, EnCas1Time, EnCas2Time }}>
-      {children}
-      <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
-        <Layout style={styles.container} level='1'>
-          <AppNavigator />
-        </Layout>
-      </ApplicationProvider>
+        {children}
     </RepasContext.Provider>
   )
+
 }
-
-export default AppStack
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  layout: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  bottom: {
-    justifyContent: 'flex-end',
-  },
-  topnav: {
-    justifyContent: 'flex-start',
-    marginTop: 30,
-  },
-})
