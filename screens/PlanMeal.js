@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
-import { Button, Calendar, Layout, Text } from '@ui-kitten/components';
+import { Button, Calendar, Divider, Layout, Text } from '@ui-kitten/components';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faAngleLeft, faAngleRight, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 import { AuthContext } from '../context/AuthContext'
@@ -78,10 +78,18 @@ const PlanMeal = () => {
   }
   if(errStatus) {
     return (
+      <>
       <Layout style={styles.nofoodcontainer} level='2'>
         <Text category='h3' style={styles.nofoodtexttitle}>Votre plan de repas personnel apparaîtra ici</Text>
         <Text style={styles.nofoodtexttitle}>Pendant ce temps, remplissez votre réfrigérateur d'aliments sains</Text>
+        <Divider />
+        <Text category='h4' style={styles.changedate}>Changez la date {selectedDate}</Text>
+        <Button onPress={() => childCompRef.current.showDatePicker()} appearance='ghost' style={styles.today} size='large'>
+          <CalendarIcon /> { selectedDateString }
+        </Button>
       </Layout>
+      <DatePicker ref={childCompRef} getD={selectedDate => setSelectedDate(selectedDate)} MinDate={MinDate} MaxDate={MaxDate}/>
+      </>
     )
   }
   return (
@@ -122,6 +130,10 @@ const styles = StyleSheet.create({
   nofoodtexttitle: {
     textAlign: 'center',
     marginVertical: 8,
+  },
+  changedate: {
+    marginTop: 18,
+    color: '#3169F7'
   },
   container: {
     flex: 1,

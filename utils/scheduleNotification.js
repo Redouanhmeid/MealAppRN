@@ -5,9 +5,7 @@ import { RepasContext } from '../screens/AppStack';
 export const scheduleNotification = () =>{
   const {getMealsNotifications, BrNotif, LnNotif, DnNotif, E1Notif, E2Notif, requestTimes, BreakFastTime, LunchTime, DinnerTime, EnCas1Time, EnCas2Time} = useContext(RepasContext)
   let BrH; let BrM; let LrH; let LrM; let DrH; let DrM; let E1rH; let E1rM; let E2rH; let E2rM;
-  useLayoutEffect(() => {
-    Notifications.cancelAllScheduledNotificationsAsync();
-  })
+ 
   function getInfos() {
     getMealsNotifications()
     requestTimes()

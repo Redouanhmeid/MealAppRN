@@ -1,4 +1,4 @@
-import { View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Dimensions, TouchableOpacity, BackHandler } from 'react-native'
 import React, { useState, useContext, useLayoutEffect, useEffect } from 'react'
 import { AuthContext } from '../../context/AuthContext'
 import { RepasContext } from '../../screens/AppStack'
@@ -29,12 +29,12 @@ const Repas = ({navigation}) => {
   const LeadId = leadId.Id
   const NRepas = leadId.nrepas
   const {getMealsNotifications, BrNotif, LnNotif, DnNotif, E1Notif, E2Notif, requestTimes, BreakFastTime, LunchTime, DinnerTime, EnCas1Time, EnCas2Time} = useContext(RepasContext)
- 
+  
   const [modalvisible, setModalVisible] = useState(false)
   const [isLoaded, setIsLoaded] = useState(true) 
   const saveTimes = async () => {
     const urepastimes = {
-      Id: 133,
+      Id: LeadId,
       BreakFastTime: btime,
       LunchTime: ltime,
       DinnerTime: dtime,
@@ -42,12 +42,8 @@ const Repas = ({navigation}) => {
       EnCas2Time: c2time
     }
     axios.post(`${BASE_URL}/wp-json/repas/urepastimes/`, urepastimes)
-      .then(
-        getMealsNotifications(),
-        console.log(BreakFastTime)
-      )
+      .then(console.log(urepastimes))
       .catch(err => {console.log(err.response.data.message)})
-      .finally(() => saveNotifs())
   }
 
   useEffect(() => {
@@ -77,13 +73,12 @@ const Repas = ({navigation}) => {
     getMealsNotifications()
     requestTimes()
     setToggles()
-    console.log(BrNotif, LnNotif, DnNotif, E1Notif, E2Notif)
   }, [LeadId])
 
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
-      onPress={() => saveTimes()}
+      onPress={() => saveAll()}
     />
   );
 
@@ -213,17 +208,32 @@ const Repas = ({navigation}) => {
       meals_notifications: `[${notifs}]`
     }
     axios.post(`${BASE_URL}/wp-json/lead/mealsnotifications/`, unotifs)
-      .then(
-        console.log(unotifs),
-        scheduleBreakfastNotification(),
-        scheduleLunchNotification(),
-        scheduleDinnerNotification(),
-        scheduleEnCas1Notification(),
-        scheduleEnCas2Notification(),
-      )
+      .then(console.log(unotifs))
       .catch(err => {console.log(err.response.data.message)})
-      .finally(() => navigation.goBack())
   }
+
+  function saveAll() {
+    saveTimes(),
+    saveNotifs(),
+    scheduleBreakfastNotification(),
+    scheduleLunchNotification(),
+    scheduleDinnerNotification(),
+    scheduleEnCas1Notification(),
+    scheduleEnCas2Notification(),
+    navigation.goBack()
+  }
+  const backActionHandler = () => {
+     saveAll()
+    return true;
+  };
+  useEffect(() => {
+    // Add event listener for hardware back button press on Android
+    BackHandler.addEventListener("hardwareBackPress", backActionHandler)
+    return () =>
+      // clear/remove event listener
+      BackHandler.removeEventListener("hardwareBackPress", backActionHandler)
+  }, [])
+
   if(isLoaded) {
     return (
       <Layout style={styles.spinnercontainer} level='2'>

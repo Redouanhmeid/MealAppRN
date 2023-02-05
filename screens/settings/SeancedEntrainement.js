@@ -8,6 +8,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { AuthContext } from '../../context/AuthContext'
 import axios from 'axios'
 import { BASE_URL } from '../../client-config'
+import { scheduleWorkoutNotification } from '../../utils/scheduleWorkoutNotification'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
@@ -20,6 +21,7 @@ const SeancedEntrainement = ({navigation}) => {
   const LeadId = leadId.Id
   const [checked, setChecked] = useState(false)
   const [isLoaded, setIsLoaded] = useState(true)
+  const { scheduleWONotification } = scheduleWorkoutNotification()
 
   const getNotif = async () => {
     try {
@@ -58,7 +60,7 @@ const SeancedEntrainement = ({navigation}) => {
   const renderBackAction = () => (
     <TopNavigationAction
       icon={BackIcon}
-      onPress={() => {putWorkoutdays(), putTime(), putNotif(), navigation.goBack()}}
+      onPress={() => {putWorkoutdays(), putTime(), putNotif(), navigation.goBack(), scheduleWONotification(notif, workout)}}
     />
   );
   const onCheckedChange = (isChecked) => {setChecked(isChecked)}

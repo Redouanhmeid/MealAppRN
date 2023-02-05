@@ -295,7 +295,7 @@ const AppStack = ({children}) => {
     }
   }
   return (
-    <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes, errStatus, getMealsNotifications, BrNotif, LnNotif, DnNotif, E1Notif, E2Notif, requestTimes, BreakFastTime, LunchTime, DinnerTime, EnCas1Time, EnCas2Time }}>
+    <RepasContext.Provider value={{Repas1, Repas2, Repas3, Repas4, Repas5, getRepasFait, requestRepas, BrFait, LnFait, DnFait, E1Fait, E2Fait, TotalCal, CalIng, graisses, glucides, protienes, errStatus, getMealsNotifications, BrNotif, LnNotif, DnNotif, E1Notif, E2Notif, requestTimes, BreakFastTime, LunchTime, DinnerTime, EnCas1Time, EnCas2Time }}>
       {children}
       <ApplicationProvider {...eva} theme={{...eva.light, ...theme}}>
         <Layout style={styles.container} level='1'>

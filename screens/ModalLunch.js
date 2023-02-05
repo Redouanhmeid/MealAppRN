@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions, StatusBar } from 'react-native'
 import React, {useContext, useState, useEffect} from 'react'
-import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
+import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Foods from '../assets/food2.json'
@@ -24,15 +24,20 @@ const DeleteIcon = () => (
 
 const ModalLunch = ({toModalLunch}) => {
   let tempDate = new Date()
-  let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
+  let ftodayDate = tempDate.toLocaleDateString('en-CA')
   const {programId} = useContext(AuthContext)
-  const {getRepasFait, Repas2, LnFait} = useContext(RepasContext)
+  const {getRepasFait, LnFait} = useContext(RepasContext)
   const Repas = toModalLunch.Repas2
+  const day = toModalLunch.date
   const [isLoaded, setIsLoaded] = useState(true)
+  let daytocompare = tempDate.toLocaleDateString('fr')
+  const [NotToday, setNotToday] = useState(false)
 
   useEffect(()=>{
     if(Repas !== undefined || null){setIsLoaded(false)}
+    if(day.toLocaleDateString('fr') !== daytocompare){setNotToday(true)}
   })
+
   const renderBackAction = () => (
     <TopNavigationAction
       icon={CloseIcon}
@@ -77,11 +82,17 @@ const ModalLunch = ({toModalLunch}) => {
       .catch(err => {console.log(err.response.data.message)})
       .finally(() => toModalLunch.setLunchVisible(false))
   }
+  
   if(isLoaded) {
     return (
-      <Layout style={styles.spinnercontainer} level='1'>
-        <Spinner size='giant'/>
-      </Layout>
+      <SafeAreaView style={styles.ModalContainer}>
+        <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
+        <TopNavigation style={styles.ModalTopContainer} title={LunchTitleModal} accessoryLeft={renderBackAction}/>
+        <Layout style={styles.nofoodcontainer} level='2'>
+          <Text category='h3' style={styles.nofoodtexttitle}>Votre plan de repas personnel apparaîtra ici</Text>
+          <Text style={styles.nofoodtexttitle}>Pendant ce temps, remplissez votre réfrigérateur d'aliments sains</Text>
+        </Layout>
+      </SafeAreaView>
     )
   }
   return (
@@ -108,7 +119,7 @@ const ModalLunch = ({toModalLunch}) => {
         <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
-        <Button style={{width: windowWidth-50}} size={'large'} onPress={LnFait ? Delete : Fait} accessoryRight={LnFait && DeleteIcon}>Fait</Button>
+        <Button style={{width: windowWidth-50}} disabled={NotToday} size={'large'} onPress={LnFait ? Delete : Fait} accessoryRight={LnFait && DeleteIcon}>Fait</Button>
       </Layout>
     </SafeAreaView>
   )
@@ -117,14 +128,19 @@ const ModalLunch = ({toModalLunch}) => {
 export default ModalLunch
 
 const styles = StyleSheet.create({
-  spinnercontainer: {
-    flex:1,
-    flexDirection: 'column',
-    justifyContent:'center',
-    alignItems:'center',
+  nofoodcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 12,
     backgroundColor: '#fff',
     width: windowWidth,
     height: windowHeight,
+  },
+  nofoodtexttitle: {
+    textAlign: 'center',
+    marginVertical: 8,
   },
   ModalContainer: {
     width: windowWidth,

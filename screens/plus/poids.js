@@ -5,6 +5,8 @@ import { Layout, Text, Divider, TopNavigationAction, TopNavigation, Input, Butto
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose, faInfoCircle, faCalendarAlt } from '@fortawesome/free-solid-svg-icons'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import axios from 'axios'
+import { BASE_URL } from '../../client-config'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
@@ -13,6 +15,9 @@ const renderDateIcon = () => (<FontAwesomeIcon icon={ faCalendarAlt } size={ 24 
 const kg = () => ( <Text category='s1'>kg</Text>)
 
 const Poids = ({navigation}) => {
+  const { leadId } = useContext(AuthContext)
+  const LeadId = leadId.Id
+  
     const renderBackAction = () => (
       <TopNavigationAction
         icon={CloseIcon}
@@ -21,11 +26,24 @@ const Poids = ({navigation}) => {
     );
     const [poids, setPoids] = useState('')
     const [date, setDate] = useState(new Date())
+    const currentdate = new Date()
+    const lastmontdate = new Date(new Date().setDate(new Date().getDate()-7));
     const [tooltipvisible, setToolTipVisible] = useState(false)
     const renderTooltip = () => (
       <Text category='c1' onPress={() => setToolTipVisible(true)} color={'#82878c'}><FontAwesomeIcon icon={ faInfoCircle } size={ 14 } color={'#6c757d'} /> Comment vous peser ?</Text>
     );
-
+    
+    const save = async(poids, date, LeadId) => {
+      const iprogress ={
+        weight: poids,
+        date: date,
+        lead: LeadId
+      };
+      axios.post(`${BASE_URL}/wp-json/weight/progress`, iprogress)
+        .then(console.log(iprogress))
+        .catch(err => {console.log(err.response.data.message)})
+        .finally(() => navigation.goBack())
+    }
   return (
    <KeyboardAwareScrollView
       keyboardShouldPersistTaps='always'
@@ -39,7 +57,7 @@ const Poids = ({navigation}) => {
       <Divider/>
       <Layout style={styles.laycontainer} level='1'>
         <Input
-          placeholder='Place your Text'
+          placeholder='Entrez votre poids'
           label='Poids'
           style={styles.input}
           size='large'
@@ -57,10 +75,12 @@ const Poids = ({navigation}) => {
           label='Date'
           style={styles.input}
           date={date}
+          min={lastmontdate}
+          max={currentdate}
           onSelect={nextDate => setDate(nextDate)}
           accessoryRight={renderDateIcon}
         />
-        <Button onPress={() => console.log(poids, date.toLocaleDateString('fr'))} style={styles.input}>
+        <Button onPress={() => save(poids, date.toLocaleDateString('en-CA'), LeadId)} style={styles.input}>
           Envoyer
         </Button>
       </Layout>

@@ -58,6 +58,7 @@ const PlanMealChild = ({getD}) => {
   }, [day, programId])
 
   const requestRepas = async (Item, day) => {
+    console.log(Item, day)
     try {
       var params = {
         url: `${BASE_URL}/wp-json/repas/idrepas/idprog=${Item}/repasday=${day}`,

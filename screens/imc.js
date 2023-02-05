@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
       borderRadius: 12,
     },
     icon: {
-      color: "#F2355B",
+      color: "#C628A4",
       width: 64,
       height: 64,
     },

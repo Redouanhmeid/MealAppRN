@@ -1,6 +1,6 @@
 import { View, StyleSheet, ScrollView, ImageBackground, Dimensions, StatusBar } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
-import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout, Spinner } from '@ui-kitten/components'
+import { Card, Text, Button, TopNavigation, TopNavigationAction, Divider, Layout } from '@ui-kitten/components'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faClose, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import Foods from '../assets/food2.json'
@@ -24,14 +24,18 @@ const DeleteIcon = () => (
 
 const ModalEnCas1 = ({toModalEnCas1}) => {
   let tempDate = new Date()
-  let ftodayDate = tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate()
+  let ftodayDate = tempDate.toLocaleDateString('en-CA')
   const {programId} = useContext(AuthContext)
   const {getRepasFait, E1Fait} = useContext(RepasContext)
   const Repas = toModalEnCas1.Repas4
+  const day = toModalEnCas1.date
   const [isLoaded, setIsLoaded] = useState(true)
+  let daytocompare = tempDate.toLocaleDateString('fr')
+  const [NotToday, setNotToday] = useState(false)
 
   useEffect(()=>{
     if(Repas !== undefined || null){setIsLoaded(false)}
+    if(day.toLocaleDateString('fr') !== daytocompare){setNotToday(true)}
   })
 
   const renderBackAction = () => (
@@ -80,9 +84,14 @@ const ModalEnCas1 = ({toModalEnCas1}) => {
   }
   if(isLoaded) {
     return (
-      <Layout style={styles.spinnercontainer} level='1'>
-        <Spinner size='giant'/>
-      </Layout>
+      <SafeAreaView style={styles.ModalContainer}>
+        <StatusBar barStyle="light-content" backgroundColor="#C628A4"/>
+        <TopNavigation style={styles.ModalTopContainer} title={EnCas1TitleModal} accessoryLeft={renderBackAction}/>
+        <Layout style={styles.nofoodcontainer} level='2'>
+          <Text category='h3' style={styles.nofoodtexttitle}>Votre plan de repas personnel apparaîtra ici</Text>
+          <Text style={styles.nofoodtexttitle}>Pendant ce temps, remplissez votre réfrigérateur d'aliments sains</Text>
+        </Layout>
+      </SafeAreaView>
     )
   }
   return (
@@ -109,7 +118,7 @@ const ModalEnCas1 = ({toModalEnCas1}) => {
         <Text style={styles.desc}>{Foods.find(food => food.id == Repas).description}</Text>
       </ScrollView>
       <Layout style={styles.bottom} level='1'>
-        <Button style={{width: windowWidth-50}} size={'large'} onPress={E1Fait ? Delete : Fait} accessoryRight={E1Fait && DeleteIcon}>Fait</Button>
+        <Button style={{width: windowWidth-50}} disabled={NotToday} size={'large'} onPress={E1Fait ? Delete : Fait} accessoryRight={E1Fait && DeleteIcon}>Fait</Button>
       </Layout>
     </SafeAreaView>
   )
@@ -118,14 +127,19 @@ const ModalEnCas1 = ({toModalEnCas1}) => {
 export default ModalEnCas1
 
 const styles = StyleSheet.create({
-  spinnercontainer: {
-    flex:1,
-    flexDirection: 'column',
-    justifyContent:'center',
-    alignItems:'center',
+  nofoodcontainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 12,
     backgroundColor: '#fff',
     width: windowWidth,
     height: windowHeight,
+  },
+  nofoodtexttitle: {
+    textAlign: 'center',
+    marginVertical: 8,
   },
   ModalContainer: {
     width: windowWidth,
