@@ -1,8 +1,18 @@
-const path = require('path')
-const MetroConfig = require('@ui-kitten/metro-config');
-const {getDefaultConfig} = require('expo/metro-config')
-const config = getDefaultConfig(__dirname);
-const evaConfig = {
-    evaPackage: '@eva-design/eva',
-  };
-  module.exports = MetroConfig.create(evaConfig,config);
+const { getDefaultConfig } = require('@expo/metro-config');
+
+   module.exports = (async () => {
+        const {
+           resolver: { sourceExts, assetExts },
+        } = await getDefaultConfig(__dirname);
+
+return {
+    transformer: {
+        babelTransformerPath: require.resolve("react-native-svg-transformer"),
+        assetPlugins: ["expo-asset/tools/hashAssetFiles"],
+    },
+    resolver: {
+        assetExts: assetExts.filter((ext) => ext !== "svg"),
+        sourceExts: [...sourceExts, "svg"],
+    },
+};
+})();

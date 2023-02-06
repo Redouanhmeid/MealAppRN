@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "582945844448",
+    "project_id": "fir-auth-671c8",
+    "storage_bucket": "fir-auth-671c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582945844448:android:b4d39896a042d5d678b485",
+        "android_client_info": {
+          "package_name": "com.astraldigital.mealapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582945844448-cntl4a03d6ku8bmi12h78m5au8cvmn5u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaH2yjv_9jsmKK6Ol8WPWzWk_vzuiAqiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582945844448-cntl4a03d6ku8bmi12h78m5au8cvmn5u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
